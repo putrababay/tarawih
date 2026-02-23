@@ -1,0 +1,17 @@
+{
+    "name": "Tarawih by Bayu Anggara",
+    "short_name": "Tarawih",
+    "description": "Panduan Tarawih, Bilal, dan Doa Kamilin Offline",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#10b981",
+    "icons": [
+        {
+            "src": "https://tarawih.pages.dev/og-image.jpg",
+            "sizes": "512x512",
+            "type": "image/jpeg",
+            "purpose": "any maskable"
+        }
+    ]
+}

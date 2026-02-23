@@ -9,6 +9,15 @@
       name="description"
       content="Asisten digital ibadah Tarawih & Witir. Dilengkapi penghitung rakaat, panduan Bilal NU/Muhammadiyah, dan doa Kamilin bertajwid." />
     <meta name="theme-color" content="#10b981" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Tarawih Go" />
+    <link
+      rel="apple-touch-icon"
+      href="https://tarawih.pages.dev/og-image.jpg" />
+    <link rel="manifest" href="/manifest.json" />
 
     <link
       rel="icon"
@@ -351,6 +360,55 @@
         <div id="tadarusList" class="space-y-3"></div>
       </section>
     </div>
+
+    <div
+      id="installBanner"
+      class="hidden fixed bottom-6 left-6 right-6 z-[100] animate-bounce-subtle">
+      <div
+        class="bg-slate-900 text-white p-4 rounded-2xl shadow-2xl flex items-center justify-between border border-slate-700">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center text-xl">
+            🌙
+          </div>
+          <div>
+            <p class="text-[11px] font-black uppercase tracking-widest">
+              Pasang Aplikasi
+            </p>
+            <p class="text-[9px] text-slate-400">
+              Akses cepat & Offline tanpa kuota
+            </p>
+          </div>
+        </div>
+        <div class="flex gap-2">
+          <button
+            onclick="closeInstallBanner()"
+            class="px-3 py-2 text-[10px] font-bold text-slate-400 uppercase">
+            Nanti
+          </button>
+          <button
+            onclick="triggerInstall()"
+            class="px-5 py-2 bg-emerald-500 hover:bg-emerald-400 text-white text-[10px] font-black rounded-lg uppercase transition-colors">
+            Install
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <style>
+      @keyframes bounce-subtle {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-5px);
+        }
+      }
+      .animate-bounce-subtle {
+        animation: bounce-subtle 3s infinite ease-in-out;
+      }
+    </style>
 
     <footer class="mt-2 px-8 border-t border-slate-100 pt-1">
       <div class="flex flex-row items-center justify-between gap-1">
@@ -1291,6 +1349,39 @@
       }
 
       renderUI();
+    </script>
+
+    <script>
+      // Tambahkan logika ini di script utama Anda
+      let deferredPrompt;
+      window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        // Tampilkan tombol install jika ingin (opsional)
+        console.log("Aplikasi siap diinstal di HP");
+      });
+
+      // Anda bisa panggil fungsi ini dari tombol "Install" di UI
+      function installApp() {
+        if (deferredPrompt) {
+          deferredPrompt.prompt();
+          deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === "accepted") {
+              console.log("User menginstal aplikasi");
+            }
+            deferredPrompt = null;
+          });
+        }
+      }
+
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("/sw.js")
+            .then((reg) => console.log("Service Worker aktif!"))
+            .catch((err) => console.error("Service Worker gagal:", err));
+        });
+      }
     </script>
   </body>
 </html>

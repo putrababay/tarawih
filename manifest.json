@@ -8,9 +8,9 @@
     "theme_color": "#10b981",
     "icons": [
         {
-            "src": "https://tarawih.pages.dev/og-image.jpg",
+            "src": "https://tarawih.pages.dev/logo.png",
             "sizes": "512x512",
-            "type": "image/jpeg",
+            "type": "image/png",
             "purpose": "any maskable"
         }
     ]

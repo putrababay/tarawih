@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>🌙 Tarawih — Bayu Anggara</title>
-    <meta name="title" content="🌙 Tarawih Companion — Bayu Anggara" />
+    <title>Tarawih Go— Bayu Anggara</title>
+    <meta name="title" content=" Tarawih Companion — Bayu Anggara" />
     <meta
       name="description"
       content="Asisten digital ibadah Tarawih & Witir. Dilengkapi penghitung rakaat, panduan Bilal NU/Muhammadiyah, dan doa Kamilin bertajwid." />
@@ -14,14 +14,10 @@
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Tarawih Go" />
-    <link
-      rel="apple-touch-icon"
-      href="https://tarawih.pages.dev/og-image.jpg" />
+    <link rel="apple-touch-icon" href="logo.png" />
     <link rel="manifest" href="/manifest.json" />
 
-    <link
-      rel="icon"
-      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌙</text></svg>" />
+    <link rel="icon" href="logo.png" />
 
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://tarawih.pages.dev/" />
@@ -29,9 +25,7 @@
     <meta
       property="og:description"
       content="Bantu ibadah Tarawih lebih tertib. Panduan Bilal lengkap, counter rakaat, dan teks doa bertajwid warna." />
-    <meta
-      property="og:image"
-      content="https://tarawih.pages.dev/og-image.jpg" />
+    <meta property="og:image" content="https://tarawih.pages.dev/logo.png" />
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://tarawih.pages.dev/" />
     <meta
@@ -42,7 +36,7 @@
       content="Digital assistant untuk panduan sholat Tarawih & Witir secara mandiri atau berjamaah." />
     <meta
       property="twitter:image"
-      content="https://tarawih.pages.dev/og-image.jpg" />
+      content="https://tarawih.pages.dev/logo.png" />
 
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta
@@ -1352,27 +1346,45 @@
     </script>
 
     <script>
-      // Tambahkan logika ini di script utama Anda
       let deferredPrompt;
+      const installBanner = document.getElementById("installBanner");
+
+      // Deteksi jika browser siap menginstal
       window.addEventListener("beforeinstallprompt", (e) => {
+        // Mencegah mini-infobar bawaan browser muncul
         e.preventDefault();
+        // Simpan event agar bisa dipicu nanti
         deferredPrompt = e;
-        // Tampilkan tombol install jika ingin (opsional)
-        console.log("Aplikasi siap diinstal di HP");
+        // Munculkan banner custom kita
+        installBanner.classList.remove("hidden");
       });
 
-      // Anda bisa panggil fungsi ini dari tombol "Install" di UI
-      function installApp() {
+      // Fungsi untuk menjalankan proses instalasi
+      function triggerInstall() {
         if (deferredPrompt) {
           deferredPrompt.prompt();
           deferredPrompt.userChoice.then((choiceResult) => {
             if (choiceResult.outcome === "accepted") {
-              console.log("User menginstal aplikasi");
+              console.log("User menerima instalasi");
             }
+            installBanner.classList.add("hidden");
             deferredPrompt = null;
           });
         }
       }
+
+      function closeInstallBanner() {
+        installBanner.classList.add("hidden");
+        // Opsional: Simpan di localstorage agar tidak muncul lagi hari ini
+        localStorage.setItem("installPromptDismissed", Date.now());
+      }
+
+      // Sembunyikan banner jika aplikasi sudah terinstall
+      window.addEventListener("appinstalled", () => {
+        installBanner.classList.add("hidden");
+        deferredPrompt = null;
+        console.log("Aplikasi berhasil terpasang!");
+      });
 
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {

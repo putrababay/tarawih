@@ -1,832 +1,1248 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🌙 Tarawih — Bayu Anggara</title>
+    <meta name="title" content="🌙 Tarawih Companion — Bayu Anggara" />
+    <meta
+      name="description"
+      content="Asisten digital ibadah Tarawih & Witir. Dilengkapi penghitung rakaat, panduan Bilal NU/Muhammadiyah, dan doa Kamilin bertajwid." />
+    <meta name="theme-color" content="#10b981" />
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tarawih Pro - Bayu Anggara</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌙</text></svg>" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tarawih.pages.dev/" />
+    <meta property="og:title" content="🌙 Tarawih Companion — Bayu Anggara" />
+    <meta
+      property="og:description"
+      content="Bantu ibadah Tarawih lebih tertib. Panduan Bilal lengkap, counter rakaat, dan teks doa bertajwid warna." />
+    <meta
+      property="og:image"
+      content="https://tarawih.pages.dev/og-image.jpg" />
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://tarawih.pages.dev/" />
+    <meta
+      property="twitter:title"
+      content="🌙 Tarawih Companion — Bayu Anggara" />
+    <meta
+      property="twitter:description"
+      content="Digital assistant untuk panduan sholat Tarawih & Witir secara mandiri atau berjamaah." />
+    <meta
+      property="twitter:image"
+      content="https://tarawih.pages.dev/og-image.jpg" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Amiri:wght@700&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Amiri:wght@700&display=swap"
+      rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <style>
-        :root {
-            --sage-dark: #3e4d3e;
-            --sage-done: #6b8a6b;
-            --cream-bg: #f8f7f2;
-            --text-main: #1a1d1a;
+      :root {
+        --sage-dark: #3e4d3e;
+        --sage-done: #6b8a6b;
+        --cream-bg: #f8f7f2;
+        --text-main: #1a1d1a;
+      }
+
+      body {
+        font-family: "Outfit", sans-serif;
+        background-color: var(--cream-bg);
+        color: var(--text-main);
+        overflow-x: hidden;
+      }
+
+      .arabic {
+        font-family: "Amiri", serif;
+        direction: rtl;
+        line-height: 2.2;
+      }
+
+      /* Header Elegant Floating */
+      .modern-header {
+        background: rgba(248, 247, 242, 0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      .soft-card {
+        background: #ffffff;
+        border-radius: 2rem;
+        border: 1px solid #f0f0f0;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
+      }
+
+      /* Timeline Labels */
+      .step-bubble {
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        font-size: 0.7rem;
+        font-weight: 800;
+        background: #f1f1f1;
+        color: #bbb;
+        border: 1px solid #eee;
+        transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      .step-done {
+        background: var(--sage-done) !important;
+        color: white !important;
+        border-color: transparent !important;
+      }
+
+      .step-active {
+        background: var(--sage-dark) !important;
+        color: white !important;
+        transform: scale(1.15);
+        box-shadow: 0 5px 12px rgba(62, 77, 62, 0.2);
+      }
+
+      /* Full Screen Modal Minimalist */
+      .modal-full {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        background: white;
+        padding: 2rem;
+        flex-direction: column;
+        animation: slideUp 0.3s ease-out;
+      }
+
+      @keyframes slideUp {
+        from {
+          transform: translateY(100%);
         }
 
-        body {
-            font-family: 'Outfit', sans-serif;
-            background-color: var(--cream-bg);
-            color: var(--text-main);
-            overflow-x: hidden;
+        to {
+          transform: translateY(0);
         }
+      }
 
-        .arabic {
-            font-family: 'Amiri', serif;
-            direction: rtl;
-            line-height: 2.2;
-        }
+      .modal-active {
+        display: flex !important;
+      }
 
-        /* Header Elegant Floating */
-        .modern-header {
-            background: rgba(248, 247, 242, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.03);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
+      .btn-action {
+        transition: all 0.2s;
+      }
 
-        .soft-card {
-            background: #ffffff;
-            border-radius: 2rem;
-            border: 1px solid #f0f0f0;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
-        }
+      .btn-action:active {
+        transform: scale(0.96);
+        opacity: 0.9;
+      }
 
-        /* Timeline Labels */
-        .step-bubble {
-            width: 38px;
-            height: 38px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            font-size: 0.7rem;
-            font-weight: 800;
-            background: #f1f1f1;
-            color: #bbb;
-            border: 1px solid #eee;
-            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
+      /* Tadarus CRUD Style */
+      .tadarus-card {
+        border-left: 3px solid var(--sage-dark);
+      }
 
-        .step-done {
-            background: var(--sage-done) !important;
-            color: white !important;
-            border-color: transparent !important;
-        }
-
-        .step-active {
-            background: var(--sage-dark) !important;
-            color: white !important;
-            transform: scale(1.15);
-            box-shadow: 0 5px 12px rgba(62, 77, 62, 0.2);
-        }
-
-        /* Full Screen Modal Minimalist */
-        .modal-full {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 200;
-            background: white;
-            padding: 2rem;
-            flex-direction: column;
-            animation: slideUp 0.3s ease-out;
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(100%);
-            }
-
-            to {
-                transform: translateY(0);
-            }
-        }
-
-        .modal-active {
-            display: flex !important;
-        }
-
-        .btn-action {
-            transition: all 0.2s;
-        }
-
-        .btn-action:active {
-            transform: scale(0.96);
-            opacity: 0.9;
-        }
-
-        /* Tadarus CRUD Style */
-        .tadarus-card {
-            border-left: 3px solid var(--sage-dark);
-        }
-
-        input::placeholder {
-            font-size: 0.8rem;
-            opacity: 0.5;
-        }
+      input::placeholder {
+        font-size: 0.8rem;
+        opacity: 0.5;
+      }
     </style>
-</head>
+  </head>
 
-<body class="max-w-md mx-auto min-h-screen flex flex-col pb-8">
-
+  <body class="max-w-md mx-auto min-h-screen flex flex-col pb-8">
     <header class="modern-header px-6 py-4">
-        <div class="flex justify-between items-center">
-            <div class="flex items-center gap-2 text-slate-400">
-                <i class="fa-regular fa-clock text-[10px]"></i>
-                <span id="clock" class="text-[11px] font-bold tracking-tighter">00:00</span>
-            </div>
-            <span class="text-[9px] font-black uppercase tracking-[0.4em] text-sage-dark/40">Tarawih-MU</span>
-            <div class="flex items-center gap-2 text-slate-400">
-                <span id="date" class="text-[11px] font-bold uppercase tracking-tighter">23 FEB</span>
-                <i class="fa-regular fa-calendar text-[10px]"></i>
-            </div>
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-2 text-slate-400">
+          <i class="fa-regular fa-clock text-[10px]"></i>
+          <span id="clock" class="text-[11px] font-bold tracking-tighter"
+            >00:00</span
+          >
         </div>
-        <div class="text-center relative">
-            <div class="w-8 h-[2px] bg-sage-done mx-auto mb-2 opacity-50"></div>
-            <h1 class="text-sm font-extrabold text-slate-800 tracking-tight leading-none uppercase">
-                Ramadhan <span class="text-sage-done" id="yearM">2026</span>
-            </h1>
-            <p class="text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-widest" id="yearH">1447 Hijriyah</p>
+        <span
+          class="text-[9px] font-black uppercase tracking-[0.4em] text-sage-dark/40"
+          >Tarawih-MU</span
+        >
+        <div class="flex items-center gap-2 text-slate-400">
+          <span
+            id="date"
+            class="text-[11px] font-bold uppercase tracking-tighter"
+            >23 FEB</span
+          >
+          <i class="fa-regular fa-calendar text-[10px]"></i>
         </div>
+      </div>
+      <div class="text-center relative">
+        <div class="w-8 h-[2px] bg-sage-done mx-auto mb-2 opacity-50"></div>
+        <h1
+          class="text-sm font-extrabold text-slate-800 tracking-tight leading-none uppercase">
+          Ramadhan <span class="text-sage-done" id="yearM">2026</span>
+        </h1>
+        <p
+          class="text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-widest"
+          id="yearH">
+          1447 Hijriyah
+        </p>
+      </div>
     </header>
 
     <div class="p-4 flex flex-col gap-4">
-        <div class="flex bg-white/50 p-1 rounded-2xl border border-slate-200 shadow-sm">
-            <button onclick="confirmModeChange('Muhammadiyah')" id="btnM"
-                class="flex-1 py-2 text-[10px] font-black rounded-xl transition-all uppercase tracking-widest">Muhammadiyah</button>
-            <button onclick="confirmModeChange('NU')" id="btnNU"
-                class="flex-1 py-2 text-[10px] font-black rounded-xl transition-all uppercase tracking-widest text-slate-400">NU
-                (20)</button>
+      <div
+        class="flex bg-white/50 p-1 rounded-2xl border border-slate-200 shadow-sm">
+        <button
+          onclick="confirmModeChange('Muhammadiyah')"
+          id="btnM"
+          class="flex-1 py-2 text-[10px] font-black rounded-xl transition-all uppercase tracking-widest">
+          Muhammadiyah
+        </button>
+        <button
+          onclick="confirmModeChange('NU')"
+          id="btnNU"
+          class="flex-1 py-2 text-[10px] font-black rounded-xl transition-all uppercase tracking-widest text-slate-400">
+          NU (20)
+        </button>
+      </div>
+
+      <main class="soft-card p-6 text-center">
+        <div class="flex justify-between items-center mb-4">
+          <span class="text-[10px] font-black text-slate-300 uppercase"
+            >Progres</span
+          >
+          <span
+            id="statusLabel"
+            class="text-[10px] font-black text-emerald-700 uppercase tracking-[0.2em]"
+            >READY</span
+          >
         </div>
 
-        <main class="soft-card p-6 text-center">
-            <div class="flex justify-between items-center mb-4">
-                <span class="text-[10px] font-black text-slate-300 uppercase">Progres</span>
-                <span id="statusLabel"
-                    class="text-[10px] font-black text-emerald-700 uppercase tracking-[0.2em]">READY</span>
-            </div>
+        <div
+          id="currentStepDisplay"
+          class="text-8xl font-black text-slate-800 tracking-tighter mb-1">
+          0
+        </div>
+        <p
+          id="rakaatInfo"
+          class="text-[11px] font-bold text-slate-400 mb-6 uppercase tracking-widest">
+          Ketuk Mulai
+        </p>
 
-            <div id="currentStepDisplay" class="text-8xl font-black text-slate-800 tracking-tighter mb-1">0</div>
-            <p id="rakaatInfo" class="text-[11px] font-bold text-slate-400 mb-6 uppercase tracking-widest">Ketuk Mulai
-            </p>
+        <div
+          id="timeline"
+          class="flex flex-wrap justify-center gap-2.5 mb-8"></div>
 
-            <div id="timeline" class="flex flex-wrap justify-center gap-2.5 mb-8"></div>
-
-            <div id="bilalContainer"
-                class="hidden bg-emerald-50 border border-emerald-100 rounded-2xl p-5 text-center mb-6 transition-all shadow-sm">
-                <span class="text-[8px] font-black text-emerald-600 uppercase tracking-[0.3em] mb-3 block">Seruan
-                    Bilal</span>
-                <div id="bilalText" class="arabic text-lg text-emerald-900 leading-relaxed mb-2"></div>
-                <div id="bilalLatin"
-                    class="text-[9px] font-bold text-emerald-700/60 uppercase tracking-tighter italic font-sans leading-tight">
-                </div>
-            </div>
-
-            <div class="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-left cursor-pointer btn-action"
-                onclick="showSurahDetail()">
-                <div class="flex justify-between items-center mb-2">
-                    <span class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Saran Surat</span>
-                    <i class="fa-solid fa-arrow-right-long text-[10px] text-slate-300"></i>
-                </div>
-                <div id="surahName" class="text-sm font-extrabold text-slate-700">-</div>
-                <div id="surahArabic" class="arabic truncate mt-1" style="text-align: center;">---</div>
-            </div>
-        </main>
-
-        <div class="flex flex-col gap-2">
-            <button onclick="nextStep()" id="mainBtn"
-                class="bg-slate-900 text-white w-full font-black py-4.5 rounded-2xl flex items-center justify-center gap-3 text-sm shadow-xl btn-action py-4">
-                <span>MULAI TARAWIH</span>
-                <i class="fa-solid fa-play text-[10px]"></i>
-            </button>
-            <div class="grid grid-cols-2 gap-2">
-                <button onclick="prevStep()"
-                    class="bg-white py-3.5 rounded-2xl text-[10px] font-black text-slate-500 border border-slate-200 btn-action uppercase tracking-widest">Kembali</button>
-                <button onclick="confirmReset()"
-                    class="bg-white py-3.5 rounded-2xl text-[10px] font-black text-red-500 border border-red-50 btn-action uppercase tracking-widest">Reset</button>
-            </div>
+        <div
+          id="bilalContainer"
+          class="hidden bg-emerald-50 border border-emerald-100 rounded-2xl p-5 text-center mb-6 transition-all shadow-sm">
+          <span
+            class="text-[8px] font-black text-emerald-600 uppercase tracking-[0.3em] mb-3 block"
+            >Seruan Bilal</span
+          >
+          <div
+            id="bilalText"
+            class="arabic text-lg text-emerald-900 leading-relaxed mb-2"></div>
+          <div
+            id="bilalLatin"
+            class="text-[9px] font-bold text-emerald-700/60 uppercase tracking-tighter italic font-sans leading-tight"></div>
         </div>
 
-        <div class="grid grid-cols-2 gap-3">
-            <button onclick="openModal('modalTarawih')"
-                class="group relative overflow-hidden bg-gradient-to-br from-amber-50 to-orange-100/50 text-amber-900 py-4 rounded-2xl text-[10px] font-black uppercase border border-amber-200 shadow-sm shadow-amber-900/5 btn-action tracking-widest flex flex-col items-center gap-1">
-                <i
-                    class="fa-solid fa-book-open-reader text-amber-600/50 group-hover:scale-110 transition-transform"></i>
-                <span>Doa Tarawih</span>
-            </button>
-
-            <button onclick="openModal('modalWitir')"
-                class="group relative overflow-hidden bg-gradient-to-br from-amber-50 to-orange-100/50 text-amber-900 py-4 rounded-2xl text-[10px] font-black uppercase border border-amber-200 shadow-sm shadow-amber-900/5 btn-action tracking-widest flex flex-col items-center gap-1">
-                <i class="fa-solid fa-moon text-amber-600/50 group-hover:rotate-12 transition-transform"></i>
-                <span>Doa Witir</span>
-            </button>
+        <div
+          class="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-left cursor-pointer btn-action"
+          onclick="showSurahDetail()">
+          <div class="flex justify-between items-center mb-2">
+            <span
+              class="text-[9px] font-black text-slate-400 uppercase tracking-widest"
+              >Saran Surat</span
+            >
+            <i
+              class="fa-solid fa-arrow-right-long text-[10px] text-slate-300"></i>
+          </div>
+          <div id="surahName" class="text-sm font-extrabold text-slate-700">
+            -
+          </div>
+          <div
+            id="surahArabic"
+            class="arabic truncate mt-1"
+            style="text-align: center">
+            ---
+          </div>
         </div>
+      </main>
 
-        <section class="bg-white rounded-[2rem] p-6 border border-slate-100">
-            <h2 class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-800 mb-4 text-center">Catatan
-                Tadarus</h2>
-            <div class="flex flex-col gap-2 mb-6">
-                <select id="inputSurat"
-                    class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-xs font-bold focus:outline-none focus:border-sage-done appearance-none">
-                    <option value="" disabled selected>Pilih Surat</option>
-                </select>
+      <div class="flex flex-col gap-2">
+        <button
+          onclick="nextStep()"
+          id="mainBtn"
+          class="bg-slate-900 text-white w-full font-black py-4.5 rounded-2xl flex items-center justify-center gap-3 text-sm shadow-xl btn-action py-4">
+          <span>MULAI TARAWIH</span>
+          <i class="fa-solid fa-play text-[10px]"></i>
+        </button>
+        <div class="grid grid-cols-2 gap-2">
+          <button
+            onclick="prevStep()"
+            class="bg-white py-3.5 rounded-2xl text-[10px] font-black text-slate-500 border border-slate-200 btn-action uppercase tracking-widest">
+            Kembali
+          </button>
+          <button
+            onclick="confirmReset()"
+            class="bg-white py-3.5 rounded-2xl text-[10px] font-black text-red-500 border border-red-50 btn-action uppercase tracking-widest">
+            Reset
+          </button>
+        </div>
+      </div>
 
-                <div class="flex gap-2">
-                    <input type="number" id="inputAyat" placeholder="Ayat Ke"
-                        class="flex-1 bg-slate-50 border border-slate-100 rounded-xl px-4 py-2 text-xs font-bold focus:outline-none focus:border-sage-done">
-                    <button onclick="addTadarus()"
-                        class="bg-sage-dark text-black px-6 rounded-xl btn-action shadow-lg shadow-sage-dark/20">
-                        <i class="fa-solid fa-plus text-xs"></i>
-                    </button>
-                </div>
-            </div>
-            <div id="tadarusList" class="space-y-3"></div>
-        </section>
+      <div class="grid grid-cols-2 gap-3">
+        <button
+          onclick="openModal('modalTarawih')"
+          class="group relative overflow-hidden bg-gradient-to-br from-amber-50 to-orange-100/50 text-amber-900 py-4 rounded-2xl text-[10px] font-black uppercase border border-amber-200 shadow-sm shadow-amber-900/5 btn-action tracking-widest flex flex-col items-center gap-1">
+          <i
+            class="fa-solid fa-book-open-reader text-amber-600/50 group-hover:scale-110 transition-transform"></i>
+          <span>Doa Tarawih</span>
+        </button>
+
+        <button
+          onclick="openModal('modalWitir')"
+          class="group relative overflow-hidden bg-gradient-to-br from-amber-50 to-orange-100/50 text-amber-900 py-4 rounded-2xl text-[10px] font-black uppercase border border-amber-200 shadow-sm shadow-amber-900/5 btn-action tracking-widest flex flex-col items-center gap-1">
+          <i
+            class="fa-solid fa-moon text-amber-600/50 group-hover:rotate-12 transition-transform"></i>
+          <span>Doa Witir</span>
+        </button>
+      </div>
+
+      <section class="bg-white rounded-[2rem] p-6 border border-slate-100">
+        <h2
+          class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-800 mb-4 text-center">
+          Catatan Tadarus
+        </h2>
+        <div class="flex flex-col gap-2 mb-6">
+          <select
+            id="inputSurat"
+            class="w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-xs font-bold focus:outline-none focus:border-sage-done appearance-none">
+            <option value="" disabled selected>Pilih Surat</option>
+          </select>
+
+          <div class="flex gap-2">
+            <input
+              type="number"
+              id="inputAyat"
+              placeholder="Ayat Ke"
+              class="flex-1 bg-slate-50 border border-slate-100 rounded-xl px-4 py-2 text-xs font-bold focus:outline-none focus:border-sage-done" />
+            <button
+              onclick="addTadarus()"
+              class="bg-sage-dark text-black px-6 rounded-xl btn-action shadow-lg shadow-sage-dark/20">
+              <i class="fa-solid fa-plus text-xs"></i>
+            </button>
+          </div>
+        </div>
+        <div id="tadarusList" class="space-y-3"></div>
+      </section>
     </div>
 
     <footer class="mt-2 px-8 border-t border-slate-100 pt-1">
-        <div class="flex flex-row items-center justify-between gap-1">
+      <div class="flex flex-row items-center justify-between gap-1">
+        <div class="text-left">
+          <p
+            class="text-[10px] font-black text-slate-900 tracking-[0.4em] uppercase">
+            Bayu Anggara
+          </p>
 
-            <div class="text-left">
-                <p class="text-[10px] font-black text-slate-900 tracking-[0.4em] uppercase">Bayu Anggara</p>
-
-                <a href="https://wa.me/628999686850" target="_blank"
-                    class="flex items-center gap-1.5 mt-2 group hover:text-emerald-600 transition-colors">
-                    <i class="fa-brands fa-whatsapp text-[10px] text-slate-300 group-hover:text-emerald-500"></i>
-                    <span
-                        class="text-[8px] font-bold text-slate-400 uppercase tracking-widest group-hover:text-slate-600">Chat
-                        Developer</span>
-                </a>
-            </div>
-
-            <button onclick="openModal('modalDonasi')"
-                class="group flex items-center gap-2 bg-white border border-slate-200 pl-4 pr-5 py-2.5 rounded-2xl shadow-sm hover:shadow-md transition-all btn-action active:scale-95">
-                <span class="relative flex h-2 w-2">
-                    <span
-                        class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
-                </span>
-                <span class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-700">Support</span>
-            </button>
-
+          <a
+            href="https://wa.me/628999686850"
+            target="_blank"
+            class="flex items-center gap-1.5 mt-2 group hover:text-emerald-600 transition-colors">
+            <i
+              class="fa-brands fa-whatsapp text-[10px] text-slate-300 group-hover:text-emerald-500"></i>
+            <span
+              class="text-[8px] font-bold text-slate-400 uppercase tracking-widest group-hover:text-slate-600"
+              >Chat Developer</span
+            >
+          </a>
         </div>
+
+        <button
+          onclick="openModal('modalDonasi')"
+          class="group flex items-center gap-2 bg-white border border-slate-200 pl-4 pr-5 py-2.5 rounded-2xl shadow-sm hover:shadow-md transition-all btn-action active:scale-95">
+          <span class="relative flex h-2 w-2">
+            <span
+              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+            <span
+              class="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
+          </span>
+          <span
+            class="text-[9px] font-black uppercase tracking-[0.2em] text-slate-700"
+            >Support</span
+          >
+        </button>
+      </div>
     </footer>
 
     <style>
-        .modal-blur {
-            display: none;
-            /* Default sembunyi */
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(8px);
-            z-index: 200;
-            align-items: center;
-            justify-content: center;
-        }
+      .modal-blur {
+        display: none;
+        /* Default sembunyi */
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(8px);
+        z-index: 200;
+        align-items: center;
+        justify-content: center;
+      }
 
-        .modal-active {
-            display: flex !important;
-            /* Tampil saat aktif */
-        }
+      .modal-active {
+        display: flex !important;
+        /* Tampil saat aktif */
+      }
     </style>
 
-    <div id="modalDonasi" class="modal-blur" onclick="closeModal('modalDonasi')">
-        <div class="bg-white rounded-[2.5rem] p-8 w-full max-w-sm shadow-2xl mx-4" onclick="event.stopPropagation()">
-            <div class="text-center mb-8">
-                <div class="w-10 h-1 bg-slate-100 mx-auto rounded-full mb-6"></div>
-                <h3 class="font-black text-slate-800 tracking-widest uppercase text-xs">Metode Donasi</h3>
-                <p class="text-[10px] text-slate-400 mt-2 font-bold tracking-widest">0899 9686 850</p>
-            </div>
-
-            <div class="grid gap-3">
-                <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                    <span class="text-[9px] font-black text-slate-600 uppercase tracking-widest">ShopeePay</span>
-                    <img src="https://zonalogo.com/_image?href=https%3A%2F%2Fassets.zonalogo.com%2Ffinance%2Fshopeepay.com%2Flogo-dark-1769342200686.png&w=400&h=400&f="
-                        class="h-3 opacity-70">
-                </div>
-                <div class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                    <span class="text-[9px] font-black text-slate-600 uppercase tracking-widest">GoPay / OVO</span>
-                    <div class="flex gap-2">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/8/86/Gopay_logo.svg"
-                            class="h-2.5 opacity-70">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/e/eb/Logo_ovo_purple.svg"
-                            class="h-2.5 opacity-70">
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-8 p-6 bg-white border border-slate-100 rounded-[2rem] flex flex-col items-center">
-                <div id="qrcodeDonasi"></div>
-                <p class="text-[7px] font-bold text-slate-300 uppercase tracking-[0.3em] mt-4">Scan QR Code</p>
-            </div>
-
-            <button onclick="closeModal('modalDonasi')"
-                class="w-full mt-6 py-2 text-[9px] font-black text-slate-300 uppercase tracking-widest hover:text-slate-600 transition-colors">
-                Tutup
-            </button>
+    <div
+      id="modalDonasi"
+      class="modal-blur"
+      onclick="closeModal('modalDonasi')">
+      <div
+        class="bg-white rounded-[2.5rem] p-8 w-full max-w-sm shadow-2xl mx-4"
+        onclick="event.stopPropagation()">
+        <div class="text-center mb-8">
+          <div class="w-10 h-1 bg-slate-100 mx-auto rounded-full mb-6"></div>
+          <h3
+            class="font-black text-slate-800 tracking-widest uppercase text-xs">
+            Metode Donasi
+          </h3>
+          <p class="text-[10px] text-slate-400 mt-2 font-bold tracking-widest">
+            0899 9686 850
+          </p>
         </div>
+
+        <div class="grid gap-3">
+          <div
+            class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
+            <span
+              class="text-[9px] font-black text-slate-600 uppercase tracking-widest"
+              >ShopeePay</span
+            >
+            <img
+              src="https://zonalogo.com/_image?href=https%3A%2F%2Fassets.zonalogo.com%2Ffinance%2Fshopeepay.com%2Flogo-dark-1769342200686.png&w=400&h=400&f="
+              class="h-3 opacity-70" />
+          </div>
+          <div
+            class="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100">
+            <span
+              class="text-[9px] font-black text-slate-600 uppercase tracking-widest"
+              >GoPay / OVO</span
+            >
+            <div class="flex gap-2">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/8/86/Gopay_logo.svg"
+                class="h-2.5 opacity-70" />
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/e/eb/Logo_ovo_purple.svg"
+                class="h-2.5 opacity-70" />
+            </div>
+          </div>
+        </div>
+
+        <div
+          class="mt-8 p-6 bg-white border border-slate-100 rounded-[2rem] flex flex-col items-center">
+          <div id="qrcodeDonasi"></div>
+          <p
+            class="text-[7px] font-bold text-slate-300 uppercase tracking-[0.3em] mt-4">
+            Scan QR Code
+          </p>
+        </div>
+
+        <button
+          onclick="closeModal('modalDonasi')"
+          class="w-full mt-6 py-2 text-[9px] font-black text-slate-300 uppercase tracking-widest hover:text-slate-600 transition-colors">
+          Tutup
+        </button>
+      </div>
     </div>
 
+    <div
+      id="modalTarawih"
+      class="modal-full overflow-y-auto"
+      onclick="closeModal('modalTarawih')">
+      <div
+        class="flex justify-between items-center mb-10"
+        onclick="event.stopPropagation()">
+        <span
+          class="text-[10px] font-black text-slate-300 uppercase tracking-widest"
+          >Bacaan Sholat</span
+        >
+        <button
+          onclick="closeModal('modalTarawih')"
+          class="text-slate-800 text-2xl font-light">
+          &times;
+        </button>
+      </div>
+      <div class="text-center mb-6">
+        <h3
+          class="font-black text-slate-800 tracking-[0.3em] uppercase text-xs">
+          Doa Kamilin
+        </h3>
+        <p class="text-[8px] font-bold text-slate-400 uppercase mt-1">
+          Dibaca setelah Shalat Tarawih
+        </p>
+      </div>
 
-    <div id="modalTarawih" class="modal-full overflow-y-auto" onclick="closeModal('modalTarawih')">
-        <div class="flex justify-between items-center mb-10" onclick="event.stopPropagation()">
-            <span class="text-[10px] font-black text-slate-300 uppercase tracking-widest">Bacaan Sholat</span>
-            <button onclick="closeModal('modalTarawih')" class="text-slate-800 text-2xl font-light">&times;</button>
+      <div
+        class="bg-white rounded-[2.5rem] p-6 shadow-sm border border-slate-100">
+        <div class="space-y-8">
+          <div class="text-right">
+            <p
+              class="arabic text-2xl md:text-3xl text-slate-800 leading-[2.8] dir-rtl"
+              style="direction: rtl">
+              اَللّٰهُمَّ اجْعَلْنَا بِالْإِيْمَ<span style="color: #ff0000"
+                >ا</span
+              >نِ كَ<span style="color: #ff0000">ا</span>مِلِيْنَ،
+              وَلِلْفَرَائِضِ مُؤَدِّيْنَ، وَلِلصَّلَ<span
+                style="color: #ff0000"
+                >ا</span
+              >ةِ حَافِظِيْنَ، وَلِلزَّكَ<span style="color: #ff0000">ا</span>ةِ
+              فَاعِلِيْنَ، وَلِمَ<span style="color: #ff0000">ا</span> عِ<span
+                style="color: #008000"
+                >نـدَ</span
+              >كَ طَالِبِيْنَ، وَلِعَفْوِكَ رَاجِيْنَ، وَبِالْهُدَى
+              مُتَمَسِّكِيْنَ، وَعَنِ اللَّغْوِ مُعْرِضِيْنَ، وَفِي
+              <span style="color: #3b82f6">الدُّ</span>نْيَ<span
+                style="color: #ff0000"
+                >ا</span
+              >
+              زَاهِدِيْنَ، وَفِي الْآخِرَةِ رَاغِبِيْنَ، وَبِالْقَضَ<span
+                style="color: #ff0000"
+                >ا</span
+              >ءِ رَاضِيْنَ، وَلِل<span style="color: #008000">نَّـ</span
+              >عْمَ<span style="color: #ff0000">ا</span>ءِ شَاكِرِيْنَ، وَعَلَى
+              الْبَلَ<span style="color: #ff0000">ا</span>ءِ صَابِرِيْنَ،
+              وَتَحْتَ لِوَ<span style="color: #ff0000">ا</span>ءِ
+              سَيِّدِنَ<span style="color: #ff0000">ا</span> مُحَمَّدٍ صَلَّى
+              اللهُ عَلَيْهِ وَسَلَّمَ يَوْمَ الْقِيَ<span
+                style="color: #ff0000"
+                >ا</span
+              >مَةِ سَ<span style="color: #ff0000">ا</span>ئِرِيْنَ، وَعَلَى
+              الْحَوْضِ وَ<span style="color: #ff0000">ا</span>رِدِيْنَ، وَفِي
+              الْجَ<span style="color: #ff0000">نَّـ</span>ةِ دَاخِلِيْنَ،
+              وَمِنَ ا<span style="color: #3b82f6">لنَّـ</span>ارِ نَاجِيْنَ،
+              وَعَلَى سَرِيْرِ الْكَرَامَةِ قَاعِدِيْنَ، وَبِحُوْرٍ عِيْنٍ
+              مُتَزَوِّجِيْنَ، وَمِنْ سُ<span style="color: #008000">نـدُ</span
+              >سٍ وَاِسْتَبْرَقٍ وَدِيْبَاجٍ مُتَلَبِّسِيْنَ، وَمِنْ طَعَ<span
+                style="color: #ff0000"
+                >ا</span
+              >مِ الْجَ<span style="color: #ff0000">نَّـ</span>ةِ اٰكِلِيْنَ،
+              وَمِنْ لَبَنٍ وَعَسَلٍ مُصَفًّى شَارِبِيْنَ، بِأَكْوَابٍ
+              وَأَبَارِيْقَ وَكَأْسٍ مِّنْ مَعِيْنٍ مَعَ الَّذِيْنَ أَنْعَمْتَ
+              عَلَيْهِمْ مِّنَ ال<span style="color: #3b82f6">نَّـ</span
+              >بِيِّ<span style="color: #008000">ـيـنَ</span> وَا<span
+                style="color: #3b82f6"
+                >لصِّ</span
+              >دِّيْقِيْنَ وَا<span style="color: #3b82f6">لشُّ</span>هَدَ<span
+                style="color: #ff0000"
+                >ا</span
+              >ءِ وَا<span style="color: #3b82f6">لصَّ</span>الِحِيْنَ وَحَسُنَ
+              أُولٰئِكَ رَفِيْقًا، ذٰلِكَ الْفَضْلُ مِنَ اللهِ وَكَفَى بِاللهِ
+              عَلِيْمًا، اَللّٰهُمَّ اجْعَلْنَا فِي هٰذِهِ لَيْلَةِ
+              <span style="color: #3b82f6">الـشَّـ</span>هْرِ
+              <span style="color: #3b82f6">الـشَّـ</span>رِيْفَةِ الْمُبَارَكَةِ
+              مِنَ السُّعَدَ<span style="color: #ff0000">ا</span>ءِ
+              الْمَقْبُوْلِيْنَ، وَلَا تَجْعَلْنَا مِنَ الْأَشْقِيَ<span
+                style="color: #ff0000"
+                >ا</span
+              >ءِ الْمَرْدُوْدِيْنَ، وَصَلَّى اللهُ عَلَى سَيِّدِنَا مُحَمَّدٍ
+              وَاٰلِهٖ وَصَحْبِهٖ أَجْمَعِيْنَ، بِرَحْمَتِكَ يَا أَرْحَمَ
+              <span style="color: #3b82f6">الـرَّ</span>احِمِيْنَ، وَالْحَمْدُ
+              لِلّٰهِ رَبِّ الْعَالَمِيْنَ.
+            </p>
+          </div>
+
+          <div class="border-t border-slate-50 pt-6">
+            <p
+              class="text-[9px] font-bold text-emerald-800/80 italic leading-relaxed uppercase tracking-tight font-sans">
+              "Allahummaj’alna bil imani kamilin, wa lil faraidzi muaddin, wa
+              lish-shalati hafidzin, wa liz-zakati fa’ilin, wa lima ‘indaka
+              thalibin, wa li ‘afwika rajin, wa bil huda mutamassikin, wa ‘anil
+              laghwi mu’ridzin, wa fid-dunya zahidin, wa fil akhirati raghibin,
+              wa bil qadhai radzin, wa lin-na’ma’i syakirin, wa ‘alal bala’i
+              shabirin, wa tahta liwa’i sayyidina muhammadin shallallahu ‘alaihi
+              wasallam yaumal qiyamati sa’irin, wa ilal haudhi waridin, wa fil
+              jannati dakhilin, wa minan nari najin, wa ‘ala sariril karamati
+              qa’idin, wa bihurin ‘in mutazawwijin, wa min sundusin wa
+              istabraqin wa dibajin mutalabbisin, wa min tha’amil jannati
+              akilin, wa min labanin wa ‘asalin mushaffan syaribin, bi’akwabin
+              wa abariqa wa ka’sin min ma’in ma’alladzina an’amta ‘alaihim minan
+              nabiyyina wash shiddiqina wasy syuhada’i wash shalihin wa hasuna
+              ula’ika rafiqa, dzalikal fadhlu minallahi wa kafa billahi ‘alima.
+              Allahummaj’alna fi hadzihil lailatisy syahrisy syarifatil
+              mubarakati minas su’ada’il maqbuliin, wa la taj’alna minal
+              asyqiya’il marduudin, wa shallallahu ‘ala sayyidina muhammadin wa
+              alihi wa shahbihi ajma’in, birahmatika ya arhamar rahimin, wal
+              hamdu lillahi rabbil ‘alamin."
+            </p>
+          </div>
+
+          <div class="bg-slate-50 rounded-3xl p-5 border border-slate-100">
+            <p class="text-[10px] font-medium text-slate-600 leading-relaxed">
+              <span
+                class="font-black text-slate-800 uppercase tracking-widest block mb-2 text-[8px]"
+                >Kesimpulan Doa:</span
+              >
+              Ya Allah, jadikanlah kami orang yang sempurna imannya, khusyuk
+              shalatnya, ahli zakat, dan mengharap ampunan-Mu. Lindungilah kami
+              di bawah panji Nabi Muhammad SAW, masukkan kami ke surga-Mu,
+              jauhkan dari api neraka, dan kumpulkanlah kami bersama para nabi
+              dan orang-orang shaleh.
+            </p>
+          </div>
         </div>
-        <div class="text-center mb-6">
-            <h3 class="font-black text-slate-800 tracking-[0.3em] uppercase text-xs">Doa Kamilin</h3>
-            <p class="text-[8px] font-bold text-slate-400 uppercase mt-1">Dibaca setelah Shalat Tarawih</p>
-        </div>
-
-        <div class="bg-white rounded-[2.5rem] p-6 shadow-sm border border-slate-100">
-            <div class="space-y-8">
-                <div class="text-right">
-                    <p class="arabic text-2xl md:text-3xl text-slate-800 leading-[2.8] dir-rtl" style="direction: rtl;">
-                        اَللّٰهُمَّ اجْعَلْنَا بِالْإِيْمَ<span style="color:#ff0000">ا</span>نِ كَ<span
-                            style="color:#ff0000">ا</span>مِلِيْنَ، وَلِلْفَرَائِضِ مُؤَدِّيْنَ، وَلِلصَّلَ<span
-                            style="color:#ff0000">ا</span>ةِ حَافِظِيْنَ، وَلِلزَّكَ<span
-                            style="color:#ff0000">ا</span>ةِ فَاعِلِيْنَ، وَلِمَ<span style="color:#ff0000">ا</span>
-                        عِ<span style="color:#008000">نـدَ</span>كَ طَالِبِيْنَ، وَلِعَفْوِكَ رَاجِيْنَ، وَبِالْهُدَى
-                        مُتَمَسِّكِيْنَ، وَعَنِ اللَّغْوِ مُعْرِضِيْنَ، وَفِي <span
-                            style="color:#3b82f6">الدُّ</span>نْيَ<span style="color:#ff0000">ا</span> زَاهِدِيْنَ،
-                        وَفِي الْآخِرَةِ رَاغِبِيْنَ، وَبِالْقَضَ<span style="color:#ff0000">ا</span>ءِ رَاضِيْنَ،
-                        وَلِل<span style="color:#008000">نَّـ</span>عْمَ<span style="color:#ff0000">ا</span>ءِ
-                        شَاكِرِيْنَ، وَعَلَى الْبَلَ<span style="color:#ff0000">ا</span>ءِ صَابِرِيْنَ، وَتَحْتَ
-                        لِوَ<span style="color:#ff0000">ا</span>ءِ سَيِّدِنَ<span style="color:#ff0000">ا</span>
-                        مُحَمَّدٍ صَلَّى اللهُ عَلَيْهِ وَسَلَّمَ يَوْمَ الْقِيَ<span style="color:#ff0000">ا</span>مَةِ
-                        سَ<span style="color:#ff0000">ا</span>ئِرِيْنَ، وَعَلَى الْحَوْضِ وَ<span
-                            style="color:#ff0000">ا</span>رِدِيْنَ، وَفِي الْجَ<span style="color:#ff0000">نَّـ</span>ةِ
-                        دَاخِلِيْنَ، وَمِنَ ا<span style="color:#3b82f6">لنَّـ</span>ارِ نَاجِيْنَ، وَعَلَى سَرِيْرِ
-                        الْكَرَامَةِ قَاعِدِيْنَ، وَبِحُوْرٍ عِيْنٍ مُتَزَوِّجِيْنَ، وَمِنْ سُ<span
-                            style="color:#008000">نـدُ</span>سٍ وَاِسْتَبْرَقٍ وَدِيْبَاجٍ مُتَلَبِّسِيْنَ، وَمِنْ
-                        طَعَ<span style="color:#ff0000">ا</span>مِ الْجَ<span style="color:#ff0000">نَّـ</span>ةِ
-                        اٰكِلِيْنَ، وَمِنْ لَبَنٍ وَعَسَلٍ مُصَفًّى شَارِبِيْنَ، بِأَكْوَابٍ وَأَبَارِيْقَ وَكَأْسٍ
-                        مِّنْ مَعِيْنٍ مَعَ الَّذِيْنَ أَنْعَمْتَ عَلَيْهِمْ مِّنَ ال<span
-                            style="color:#3b82f6">نَّـ</span>بِيِّ<span style="color:#008000">ـيـنَ</span> وَا<span
-                            style="color:#3b82f6">لصِّ</span>دِّيْقِيْنَ وَا<span
-                            style="color:#3b82f6">لشُّ</span>هَدَ<span style="color:#ff0000">ا</span>ءِ وَا<span
-                            style="color:#3b82f6">لصَّ</span>الِحِيْنَ وَحَسُنَ أُولٰئِكَ رَفِيْقًا، ذٰلِكَ الْفَضْلُ
-                        مِنَ اللهِ وَكَفَى بِاللهِ عَلِيْمًا، اَللّٰهُمَّ اجْعَلْنَا فِي هٰذِهِ لَيْلَةِ <span
-                            style="color:#3b82f6">الـشَّـ</span>هْرِ <span style="color:#3b82f6">الـشَّـ</span>رِيْفَةِ
-                        الْمُبَارَكَةِ مِنَ السُّعَدَ<span style="color:#ff0000">ا</span>ءِ الْمَقْبُوْلِيْنَ، وَلَا
-                        تَجْعَلْنَا مِنَ الْأَشْقِيَ<span style="color:#ff0000">ا</span>ءِ الْمَرْدُوْدِيْنَ، وَصَلَّى
-                        اللهُ عَلَى سَيِّدِنَا مُحَمَّدٍ وَاٰلِهٖ وَصَحْبِهٖ أَجْمَعِيْنَ، بِرَحْمَتِكَ يَا أَرْحَمَ
-                        <span style="color:#3b82f6">الـرَّ</span>احِمِيْنَ، وَالْحَمْدُ لِلّٰهِ رَبِّ الْعَالَمِيْنَ.
-                    </p>
-                </div>
-
-                <div class="border-t border-slate-50 pt-6">
-                    <p
-                        class="text-[9px] font-bold text-emerald-800/80 italic leading-relaxed uppercase tracking-tight font-sans">
-                        "Allahummaj’alna bil imani kamilin, wa lil faraidzi muaddin, wa lish-shalati hafidzin, wa
-                        liz-zakati fa’ilin, wa lima ‘indaka thalibin, wa li ‘afwika rajin, wa bil huda mutamassikin, wa
-                        ‘anil laghwi mu’ridzin, wa fid-dunya zahidin, wa fil akhirati raghibin, wa bil qadhai radzin, wa
-                        lin-na’ma’i syakirin, wa ‘alal bala’i shabirin, wa tahta liwa’i sayyidina muhammadin shallallahu
-                        ‘alaihi wasallam yaumal qiyamati sa’irin, wa ilal haudhi waridin, wa fil jannati dakhilin, wa
-                        minan nari najin, wa ‘ala sariril karamati qa’idin, wa bihurin ‘in mutazawwijin, wa min sundusin
-                        wa istabraqin wa dibajin mutalabbisin, wa min tha’amil jannati akilin, wa min labanin wa ‘asalin
-                        mushaffan syaribin, bi’akwabin wa abariqa wa ka’sin min ma’in ma’alladzina an’amta ‘alaihim
-                        minan nabiyyina wash shiddiqina wasy syuhada’i wash shalihin wa hasuna ula’ika rafiqa, dzalikal
-                        fadhlu minallahi wa kafa billahi ‘alima. Allahummaj’alna fi hadzihil lailatisy syahrisy
-                        syarifatil mubarakati minas su’ada’il maqbuliin, wa la taj’alna minal asyqiya’il marduudin, wa
-                        shallallahu ‘ala sayyidina muhammadin wa alihi wa shahbihi ajma’in, birahmatika ya arhamar
-                        rahimin, wal hamdu lillahi rabbil ‘alamin."
-                    </p>
-                </div>
-
-                <div class="bg-slate-50 rounded-3xl p-5 border border-slate-100">
-                    <p class="text-[10px] font-medium text-slate-600 leading-relaxed">
-                        <span
-                            class="font-black text-slate-800 uppercase tracking-widest block mb-2 text-[8px]">Kesimpulan
-                            Doa:</span>
-                        Ya Allah, jadikanlah kami orang yang sempurna imannya, khusyuk shalatnya, ahli zakat, dan
-                        mengharap ampunan-Mu. Lindungilah kami di bawah panji Nabi Muhammad SAW, masukkan kami ke
-                        surga-Mu, jauhkan dari api neraka, dan kumpulkanlah kami bersama para nabi dan orang-orang
-                        shaleh.
-                    </p>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
-
 
     <div id="modalWitir" class="modal-full" onclick="closeModal('modalWitir')">
-        <div class="flex justify-between items-center mb-10">
-            <span class="text-[10px] font-black text-slate-300 uppercase tracking-widest">Bacaan Sholat</span>
-            <button onclick="closeModal('modalWitir')" class="text-slate-800 text-2xl font-light">&times;</button>
+      <div class="flex justify-between items-center mb-10">
+        <span
+          class="text-[10px] font-black text-slate-300 uppercase tracking-widest"
+          >Bacaan Sholat</span
+        >
+        <button
+          onclick="closeModal('modalWitir')"
+          class="text-slate-800 text-2xl font-light">
+          &times;
+        </button>
+      </div>
+      <div
+        class="flex-1 flex flex-col justify-center items-center text-center p-6">
+        <h3
+          class="font-black text-slate-800 tracking-[0.3em] uppercase text-xs mb-8">
+          Dzikir Witir
+        </h3>
+
+        <div class="mb-8">
+          <p class="arabic text-5xl text-emerald-800 mb-4 leading-relaxed">
+            سُبْحَ<span style="color: #ff0000">ا</span>نَ الْمَلِكِ
+            الْقُدُّ<span style="color: #ff0000">و</span>سُ
+          </p>
+          <p
+            class="text-[10px] font-black text-emerald-700/60 uppercase tracking-widest mb-2 font-sans">
+            Subhânal malikil quddûs
+          </p>
+          <div
+            class="inline-block px-4 py-1 rounded-full bg-emerald-50 border border-emerald-100">
+            <p
+              class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest italic">
+              Dibaca 3 Kali
+            </p>
+          </div>
         </div>
-        <div class="flex-1 flex flex-col justify-center items-center text-center p-6">
-            <h3 class="font-black text-slate-800 tracking-[0.3em] uppercase text-xs mb-8">Dzikir Witir</h3>
 
-            <div class="mb-8">
-                <p class="arabic text-5xl text-emerald-800 mb-4 leading-relaxed">
-                    سُبْحَ<span style="color:#ff0000">ا</span>نَ الْمَلِكِ الْقُدُّ<span
-                        style="color:#ff0000">و</span>سُ
-                </p>
-                <p class="text-[10px] font-black text-emerald-700/60 uppercase tracking-widest mb-2 font-sans">
-                    Subhânal malikil quddûs
-                </p>
-                <div class="inline-block px-4 py-1 rounded-full bg-emerald-50 border border-emerald-100">
-                    <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest italic">Dibaca 3 Kali</p>
-                </div>
-            </div>
+        <div
+          class="bg-slate-50 rounded-3xl p-6 border border-slate-100 w-full max-w-sm">
+          <p class="arabic text-2xl text-slate-700 mb-4 leading-relaxed">
+            سُبُّوحٌ قُدُّوسٌ رَبُّنَا وَرَبُّ الْمَلَائِكَةِ وَالرُّوحِ
+          </p>
+          <p
+            class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter italic font-sans mb-6">
+            Subbûhun quddûsun rabbunâ wa rabbul malâikati war rûh
+          </p>
 
-            <div class="bg-slate-50 rounded-3xl p-6 border border-slate-100 w-full max-w-sm">
-                <p class="arabic text-2xl text-slate-700 mb-4 leading-relaxed">
-                    سُبُّوحٌ قُدُّوسٌ رَبُّنَا وَرَبُّ الْمَلَائِكَةِ وَالرُّوحِ
-                </p>
-                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter italic font-sans mb-6">
-                    Subbûhun quddûsun rabbunâ wa rabbul malâikati war rûh
-                </p>
+          <hr class="border-slate-200 mb-6" />
 
-                <hr class="border-slate-200 mb-6">
-
-                <p class="arabic text-xl text-slate-700 mb-3 leading-relaxed">
-                    اَللّٰهُمَّ <span style="color:#008000">إِنَّـ</span>كَ عَفُوٌّ كَرِيْمٌ تُحِبُّ الْعَفْوَ فَا عْفُ
-                    عَنِّ<span style="color:#ff0000">ا</span> يَا كَرِيْمُ
-                </p>
-                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter italic font-sans">
-                    Allahumma innaka 'afuwwun karîmun tuhibbul 'afwa fa'fu 'annâ yâ karîm
-                </p>
-            </div>
+          <p class="arabic text-xl text-slate-700 mb-3 leading-relaxed">
+            اَللّٰهُمَّ <span style="color: #008000">إِنَّـ</span>كَ عَفُوٌّ
+            كَرِيْمٌ تُحِبُّ الْعَفْوَ فَا عْفُ عَنِّ<span
+              style="color: #ff0000"
+              >ا</span
+            >
+            يَا كَرِيْمُ
+          </p>
+          <p
+            class="text-[9px] font-bold text-slate-400 uppercase tracking-tighter italic font-sans">
+            Allahumma innaka 'afuwwun karîmun tuhibbul 'afwa fa'fu 'annâ yâ
+            karîm
+          </p>
         </div>
+      </div>
     </div>
 
-    <div id="modalSurah" class="modal-full overflow-y-auto" onclick="closeModal('modalSurah')">
-        <div class="flex justify-between items-center mb-10">
-            <h2 id="detailSurahTitle" class="font-black text-slate-800 uppercase tracking-widest text-xs">Surat</h2>
-            <button onclick="closeModal('modalSurah')" class="text-slate-800 text-2xl font-light">&times;</button>
-        </div>
-        <div class="flex flex-col" onclick="event.stopPropagation()">
-            <p id="detailSurahArabic" onclick="selectAllText('detailSurahArabic')"
-                class="arabic text-4xl text-right text-slate-800 leading-[4rem] cursor-pointer select-all">
-            </p>
-            <p class="text-[9px] text-center text-slate-400 mt-8 uppercase tracking-widest italic">Ketuk teks untuk
-                memilih semua</p>
-        </div>
+    <div
+      id="modalSurah"
+      class="modal-full overflow-y-auto"
+      onclick="closeModal('modalSurah')">
+      <div class="flex justify-between items-center mb-10">
+        <h2
+          id="detailSurahTitle"
+          class="font-black text-slate-800 uppercase tracking-widest text-xs">
+          Surat
+        </h2>
+        <button
+          onclick="closeModal('modalSurah')"
+          class="text-slate-800 text-2xl font-light">
+          &times;
+        </button>
+      </div>
+      <div class="flex flex-col" onclick="event.stopPropagation()">
+        <p
+          id="detailSurahArabic"
+          onclick="selectAllText('detailSurahArabic')"
+          class="arabic text-4xl text-right text-slate-800 leading-[4rem] cursor-pointer select-all"></p>
+        <p
+          class="text-[9px] text-center text-slate-400 mt-8 uppercase tracking-widest italic">
+          Ketuk teks untuk memilih semua
+        </p>
+      </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script>
-        // Inisialisasi QR Code saat halaman dimuat
-        let donationQR;
+      // Inisialisasi QR Code saat halaman dimuat
+      let donationQR;
 
-        window.addEventListener('load', function () {
-            donationQR = new QRCode(document.getElementById("qrcodeDonasi"), {
-                text: "08999686850",
-                width: 140,
-                height: 140,
-                colorDark: "#1e293b",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.H
-            });
+      window.addEventListener("load", function () {
+        donationQR = new QRCode(document.getElementById("qrcodeDonasi"), {
+          text: "08999686850",
+          width: 140,
+          height: 140,
+          colorDark: "#1e293b",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H,
         });
+      });
 
-        // Fungsi tambahan untuk animasi modal agar lebih smooth
-        function openDonationModal() {
-            const modal = document.getElementById('modalDonasi');
-            modal.classList.add('modal-active');
-            // Sedikit delay untuk efek scale
-            setTimeout(() => {
-                modal.querySelector('.bg-white').classList.remove('scale-95');
-                modal.querySelector('.bg-white').classList.add('scale-100');
-            }, 10);
-        }
+      // Fungsi tambahan untuk animasi modal agar lebih smooth
+      function openDonationModal() {
+        const modal = document.getElementById("modalDonasi");
+        modal.classList.add("modal-active");
+        // Sedikit delay untuk efek scale
+        setTimeout(() => {
+          modal.querySelector(".bg-white").classList.remove("scale-95");
+          modal.querySelector(".bg-white").classList.add("scale-100");
+        }, 10);
+      }
     </script>
 
     <script>
+      // Daftar 114 Surat Al-Qur'an
+      const daftarSurat = [
+        "Al-Fatihah",
+        "Al-Baqarah",
+        "Ali 'Imran",
+        "An-Nisa'",
+        "Al-Ma'idah",
+        "Al-An'am",
+        "Al-A'raf",
+        "Al-Anfal",
+        "At-Taubah",
+        "Yunus",
+        "Hud",
+        "Yusuf",
+        "Ar-Ra'd",
+        "Ibrahim",
+        "Al-Hijr",
+        "An-Nahl",
+        "Al-Isra'",
+        "Al-Kahf",
+        "Maryam",
+        "Ta-Ha",
+        "Al-Anbiya'",
+        "Al-Hajj",
+        "Al-Mu'minun",
+        "An-Nur",
+        "Al-Furqan",
+        "Asy-Syu'ara'",
+        "An-Naml",
+        "Al-Qasas",
+        "Al-Ankabut",
+        "Ar-Rum",
+        "Luqman",
+        "As-Sajdah",
+        "Al-Ahzab",
+        "Saba'",
+        "Fatir",
+        "Ya-Sin",
+        "As-Saffat",
+        "Sad",
+        "Az-Zumar",
+        "Ghafir",
+        "Fussilat",
+        "Asy-Syura",
+        "Az-Zukhruf",
+        "Ad-Dukhan",
+        "Al-Jasiyah",
+        "Al-Ahqaf",
+        "Muhammad",
+        "Al-Fath",
+        "Al-Hujurat",
+        "Qaf",
+        "Az-Zariyat",
+        "At-Tur",
+        "An-Najm",
+        "Al-Qamar",
+        "Ar-Rahman",
+        "Al-Waqi'ah",
+        "Al-Hadid",
+        "Al-Mujadilah",
+        "Al-Hasyr",
+        "Al-Mumtahanah",
+        "As-Saff",
+        "Al-Jumu'ah",
+        "Al-Munafiqun",
+        "At-Taghabun",
+        "At-Talaq",
+        "At-Tahrim",
+        "Al-Mulk",
+        "Al-Qalam",
+        "Al-Haqqah",
+        "Al-Ma'arij",
+        "Nuh",
+        "Al-Jinn",
+        "Al-Muzzammil",
+        "Al-Muddassir",
+        "Al-Qiyamah",
+        "Al-Insan",
+        "Al-Mursalat",
+        "An-Naba'",
+        "An-Nazi'at",
+        "'Abasa",
+        "At-Takwir",
+        "Al-Infitar",
+        "Al-Mutaffifin",
+        "Al-Insyiqaq",
+        "Al-Buruj",
+        "At-Tariq",
+        "Al-A'la",
+        "Al-Ghasyiyah",
+        "Al-Fajr",
+        "Al-Balad",
+        "Asy-Syams",
+        "Al-Lail",
+        "Ad-Duha",
+        "Asy-Syarh",
+        "At-Tin",
+        "Al-'Alaq",
+        "Al-Qadr",
+        "Al-Bayyinah",
+        "Az-Zalzalah",
+        "Al-'Adiyat",
+        "Al-Qari'ah",
+        "At-Takasur",
+        "Al-'Asr",
+        "Al-Humazah",
+        "Al-Fil",
+        "Quraisy",
+        "Al-Ma'un",
+        "Al-Kautsar",
+        "Al-Kafirun",
+        "An-Nasr",
+        "Al-Lahab",
+        "Al-Ikhlas",
+        "Al-Falaq",
+        "An-Nas",
+      ];
 
-        // Daftar 114 Surat Al-Qur'an
-        const daftarSurat = [
-            "Al-Fatihah", "Al-Baqarah", "Ali 'Imran", "An-Nisa'", "Al-Ma'idah", "Al-An'am", "Al-A'raf", "Al-Anfal", "At-Taubah", "Yunus", "Hud", "Yusuf", "Ar-Ra'd", "Ibrahim", "Al-Hijr", "An-Nahl", "Al-Isra'", "Al-Kahf", "Maryam", "Ta-Ha", "Al-Anbiya'", "Al-Hajj", "Al-Mu'minun", "An-Nur", "Al-Furqan", "Asy-Syu'ara'", "An-Naml", "Al-Qasas", "Al-Ankabut", "Ar-Rum", "Luqman", "As-Sajdah", "Al-Ahzab", "Saba'", "Fatir", "Ya-Sin", "As-Saffat", "Sad", "Az-Zumar", "Ghafir", "Fussilat", "Asy-Syura", "Az-Zukhruf", "Ad-Dukhan", "Al-Jasiyah", "Al-Ahqaf", "Muhammad", "Al-Fath", "Al-Hujurat", "Qaf", "Az-Zariyat", "At-Tur", "An-Najm", "Al-Qamar", "Ar-Rahman", "Al-Waqi'ah", "Al-Hadid", "Al-Mujadilah", "Al-Hasyr", "Al-Mumtahanah", "As-Saff", "Al-Jumu'ah", "Al-Munafiqun", "At-Taghabun", "At-Talaq", "At-Tahrim", "Al-Mulk", "Al-Qalam", "Al-Haqqah", "Al-Ma'arij", "Nuh", "Al-Jinn", "Al-Muzzammil", "Al-Muddassir", "Al-Qiyamah", "Al-Insan", "Al-Mursalat", "An-Naba'", "An-Nazi'at", "'Abasa", "At-Takwir", "Al-Infitar", "Al-Mutaffifin", "Al-Insyiqaq", "Al-Buruj", "At-Tariq", "Al-A'la", "Al-Ghasyiyah", "Al-Fajr", "Al-Balad", "Asy-Syams", "Al-Lail", "Ad-Duha", "Asy-Syarh", "At-Tin", "Al-'Alaq", "Al-Qadr", "Al-Bayyinah", "Az-Zalzalah", "Al-'Adiyat", "Al-Qari'ah", "At-Takasur", "Al-'Asr", "Al-Humazah", "Al-Fil", "Quraisy", "Al-Ma'un", "Al-Kautsar", "Al-Kafirun", "An-Nasr", "Al-Lahab", "Al-Ikhlas", "Al-Falaq", "An-Nas"
-        ];
+      // Isi dropdown surat otomatis
+      function populateSurahSelect() {
+        const select = document.getElementById("inputSurat");
+        daftarSurat.forEach((s) => {
+          let opt = document.createElement("option");
+          opt.value = s;
+          opt.innerHTML = s;
+          select.appendChild(opt);
+        });
+      }
 
+      // Fungsi Select All Text
+      function selectAllText(id) {
+        const node = document.getElementById(id);
+        if (document.body.createTextRange) {
+          const range = document.body.createTextRange();
+          range.moveToElementText(node);
+          range.select();
+        } else if (window.getSelection) {
+          const selection = window.getSelection();
+          const range = document.createRange();
+          range.selectNodeContents(node);
+          selection.removeAllRanges();
+          selection.addRange(range);
+        }
+      }
 
+      // Panggil fungsi saat window load
+      window.onload = () => {
+        populateSurahSelect();
+        renderUI(); // Render UI Anda yang sudah ada
+      };
+      const config = {
+        Muhammadiyah: {
+          steps: 5,
+          label: ["1-2", "3-4", "5-6", "7-8", "W1-3"],
+          surah: [
+            "Al-Maun",
+            "Al-Kautsar",
+            "Al-Kafirun",
+            "An-Nashr",
+            "Al-Ikhlas",
+          ],
+        },
+        NU: {
+          steps: 12,
+          label: [
+            "1-2",
+            "3-4",
+            "5-6",
+            "7-8",
+            "9-10",
+            "11-12",
+            "13-14",
+            "15-16",
+            "17-18",
+            "19-20",
+            "W1-2",
+            "W3",
+          ],
+          surah: [
+            "At-Takasur",
+            "Al-Ashr",
+            "Al-Humazah",
+            "Al-Fil",
+            "Quraysh",
+            "Al-Maun",
+            "Al-Kautsar",
+            "Al-Kafirun",
+            "An-Nashr",
+            "Al-Lahab",
+            "Al-A'la",
+            "Al-Ikhlas",
+          ],
+        },
+      };
 
-        // Isi dropdown surat otomatis
-        function populateSurahSelect() {
-            const select = document.getElementById('inputSurat');
-            daftarSurat.forEach(s => {
-                let opt = document.createElement('option');
-                opt.value = s;
-                opt.innerHTML = s;
-                select.appendChild(opt);
-            });
+      const surahData = {
+        "Al-Maun": {
+          arabic: "أَرَأَيْتَ الَّذِي يُكَذِّبُ بِالدِّينِ",
+          full: `أَرَأَيْتَ الَّذِي يُكَذِّبُ بِ<span style="color:#3b82f6">الدِّي</span>نِ ۝ فَذَٰلِكَ الَّذِي يَدُعُّ الْيَتِيمَ ۝ وَلَا يَحُضُّ عَلَىٰ طَعَامِ الْمِسْكِينِ ۝ فَوَيْلٌ لِّلْمُصَلِّينَ ۝ الَّذِينَ هُمْ عَن صَلَاتِهِمْ سَاهُونَ ۝ الَّذِينَ هُمْ يُرَاءُونَ ۝ وَيَمْنَعُونَ الْ<span style="color:#ff0000">مَا</span>عُونَ ۝`,
+        },
+        "Al-Kautsar": {
+          arabic: "إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ",
+          full: `<span style="color:#ff0000">إِنَّ</span>ا أَعْطَيْنَاكَ الْكَوْثَرَ ۝ فَصَلِّ لِرَبِّكَ وَا<span style="color:#3b82f6">نْحَ</span>رْ ۝ <span style="color:#ff0000">إِنَّ</span> شَانِئَكَ هُوَ الْأَ<span style="color:#3b82f6">بْ</span>تَرُ ۝`,
+        },
+        "Al-Kafirun": {
+          arabic: "قُلْ يَا أَيُّهَا الْكَافِرُونَ",
+          full: `قُلْ يَا أَيُّهَا الْكَافِرُونَ ۝ لَا أَعْبُدُ مَا تَعْبُدُونَ ۝ وَلَا أَ<span style="color:#008000">نـتُ</span>مْ عَابِدُونَ مَا أَعْبُدُ ۝ وَلَا أَنَا عَابِدٌ مَّا عَبَد<span style="color:#ff0000">تُّ</span>مْ ۝ وَلَا أَ<span style="color:#008000">نـتُ</span>مْ عَابِدُونَ مَا أَعْبُدُ ۝ لَكُمْ دِينُكُمْ وَلِيَ دِينِ ۝`,
+        },
+        "An-Nashr": {
+          arabic: "إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ",
+          full: `إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ ۝ وَرَأَيْتَ ا<span style="color:#ff0000">لنَّ</span>اسَ يَدْخُلُونَ فِي دِينِ اللَّهِ أَفْوَاجًا ۝ فَسَبِّحْ بِحَمْدِ رَبِّكَ وَاسْتَغْفِرْهُ <span style="color:#ff0000">إِنَّ</span>هُ كَانَ تَوَّابًا ۝`,
+        },
+        "Al-Ikhlas": {
+          arabic: "قُلْ هُوَ اللَّهُ أَحَدٌ",
+          full: `قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ ا<span style="color:#ff0000">لصَّ</span>مَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ ۝`,
+        },
+        "At-Takasur": {
+          arabic: "أَلْهَاكُمُ التَّكَاثُرُ",
+          full: `أَلْهَاكُمُ التَّكَاثُرُ ۝ حَتَّىٰ زُرْتُمُ الْمَقَابِرَ ۝ كَلَّا سَوْفَ تَعْلَمُونَ ۝ ثُمَّ كَلَّا سَوْفَ تَعْلَمُونَ ۝ كَلَّا لَوْ تَعْلَمُونَ عِلْمَ الْيَقِينِ ۝ لَتَرَوُنَّ الْجَحِيمَ ۝ ثُمَّ لَتَرَوُنَّهَا عَيْنَ الْيَقِينِ ۝ ثُمَّ لَتُسْأَلُ<span style="color:#ff0000">نَّ</span> يَوْمَئِذٍ عَنِ ا<span style="color:#ff0000">لنَّ</span>عِيمِ ۝`,
+        },
+        "Al-Ashr": {
+          arabic: "وَالْعَصْرِ",
+          full: `وَالْعَصْرِ ۝ <span style="color:#ff0000">إِنَّ</span> الْإِ<span style="color:#008000">نـسَ</span>انَ لَفِي خُسْرٍ ۝ إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا ا<span style="color:#ff0000">لصَّ</span>الِحَاتِ ۝ وَتَوَاصَوْا بِالْحَقِّ وَتَوَاصَوْا بِا<span style="color:#ff0000">لصَّ</span>بْرِ ۝`,
+        },
+        "Al-Humazah": {
+          arabic: "وَيْلٌ لِّكُلِّ هُمَزةٍ لُّمَزَةٍ",
+          full: `وَيْلٌ لِّكُلِّ هُمَزَةٍ لُّـمَزَةٍ ۝ الَّذِي جَمَعَ مَالًا وَعَدَّدَهُ ۝ يَحْسَبُ أَ<span style="color:#ff0000">نَّ</span> mَالَهُ أَخْلَدَهُ ۝ كَلَّا لَيُ<span style="color:#008000">نـبَ</span>ذَ<span style="color:#ff0000">نَّ</span> فِي الْحُطَمَةِ ۝ وَmَا أَدْرَاكَ mَا الْحُطَمَةُ ۝ نَارُ اللَّهِ الْمُوقَدَةُ ۝ الَّتِي تَطَّلِعُ عَلَى الْأَفْئِدَةِ ۝ <span style="color:#ff0000">إِنَّ</span>هَا عَلَيْهِم mُّؤْصَدَةٌ ۝ فِي عَمَدٍ mُّـmَدَّدَةٍ ۝`,
+        },
+        "Al-Fil": {
+          arabic: "أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَابِ الْفِيلِ",
+          full: `أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَابِ الْفِيلِ ۝ أَلَمْ يَجْعَلْ كَيْدَهُمْ فِي تَضْلِيلٍ ۝ وَأَرْسَلَ عَلَيْهِمْ طَيْرًا أَبَابِيلَ ۝ تَرْمِيهِم بِحِجَارَةٍ مِّن سِجِّيلٍ ۝ فَجَعَلَهُمْ كَعَصْفٍ مَّأْكُولٍ ۝`,
+        },
+        Quraysh: {
+          arabic: "لِإِيلَافِ قُرَيْشٍ",
+          full: `لِإِيلَافِ قُرَيْشٍ ۝ إِيلَافِهِمْ رِحْلَةَ ا<span style="color:#ff0000">لشِّ</span>تَاءِ وَا<span style="color:#ff0000">لصَّ</span>يْفِ ۝ فَلْيَعْبُدُوا رَبَّ هَٰذَا الْبَيْتِ ۝ الَّذِي أَطْعَمَهُم مِّن جُوعٍ وَآمَنَهُم مِّنْ خَوْفٍ ۝`,
+        },
+        "Al-Lahab": {
+          arabic: "تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ",
+          full: `تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ ۝ مَا أَغْنَىٰ عَنْهُ مَالُهُ وَمَا كَسَبَ ۝ سَيَصْلَىٰ نَارًا ذَاتَ لَهَبٍ ۝ وَامْرَأَتُهُ حَمَّالَةَ الْحَطَبِ ۝ فِي جِيدِهَا حَبْلٌ مِّن مَّسَدٍ ۝`,
+        },
+        "Al-A'la": {
+          arabic: "سَبِّحِ اسْمَ رَبِّكَ الْأَعْلَى",
+          full: `سَبِّحِ اسْمَ رَبِّكَ الْأَعْلَى ۝ الَّذِي خَلَقَ فَسَوَّىٰ ۝ وَالَّذِي قَدَّرَ فَهَدَىٰ ۝ وَالَّذِي أَخْرَجَ الْمَرْعَىٰ ۝ فَجَعَلَهُ غُثَاءً أَحْوَىٰ ۝ سَنُقْرِئُكَ فَلَا تَ<span style="color:#008000">نـسَ</span>ىٰ ۝ إِلَّا مَا شَاءَ اللَّهُ <span style="color:#ff0000">إِنَّ</span>هُ يَعْلَمُ الْجهرَ وَمَا يَخْفَىٰ ۝`,
+        },
+      };
+
+      const bilalData = {
+        1: {
+          ar: "صَلُّوْا سُنَّةَ التَّرَاوِيْحِ رَكْعَتَيْنِ جَامِعَةً رَحِمَكُمُ اللهُ",
+          lt: "Shollu sunnatat-tarawihi rak'ataini jami'atan rahimakumullah",
+        },
+        2: {
+          ar: "فَضْلًا مِنَ اللهِ وَنِعْمَةً، وَمَغْفِرَةً وَرَحْمَةً",
+          lt: "Fadhlan minallahi wa ni'matan, wa maghfiratan wa rahmatan",
+        },
+        3: {
+          ar: "صَلُّوْا سُنَّةَ التَّرَاوِيْحِ رَكْعَتَيْنِ جَامِعَةً رَحِمَكُمُ اللهُ",
+          lt: "Shollu sunnatat-tarawihi rak'ataini jami'atan rahimakumullah",
+        },
+        4: {
+          ar: "أَمِيْرِ الْمُؤْمِنِيْن سَيِّدِنَا أَبِي بَكْرِ الصِّدِّيْقِ رَضِيَ اللهُ عَنْه",
+          lt: "Amiril mu'minin sayyidina Abi Bakrinis-Shiddiq radhiyallahu 'anh",
+        },
+        5: {
+          ar: "صَلُّوْا سُنَّةَ التَّرَاوِيْحِ رَكْعَتَيْنِ جَامِعَةً رَحِمَكُمُ اللهُ",
+          lt: "Shollu sunnatat-tarawihi rak'ataini jami'atan rahimakumullah",
+        },
+        6: {
+          ar: "أَمِيْرِ الْمُؤْمِنِيْن سَيِّدِنَا عُمَرَ بْنِ الْخَطَّابِ رَضِيَ اللهُ عَنْه",
+          lt: "Amiril mu'minin sayyidina 'Umarabnil-Khathab radhiyallahu 'anh",
+        },
+        7: {
+          ar: "صَلُّوْا سُنَّةَ التَّرَاوِيْحِ رَكْعَتَيْنِ جَامِعَةً رَحِمَكُمُ اللهُ",
+          lt: "Shollu sunnatat-tarawihi rak'ataini jami'atan rahimakumullah",
+        },
+        8: {
+          ar: "أَمِيْرِ الْمُؤْمِنِيْن سَيِّدِنَا عُثْمَانَ بْنِ عَفَّانَ رَضِيَ اللهُ عَنْه",
+          lt: "Amiril mu'minin sayyidina 'Utsmanabni 'Affan radhiyallahu 'anh",
+        },
+        9: {
+          ar: "صَلُّوْا سُنَّةَ التَّرَاوِيْحِ رَكْعَتَيْنِ جَامِعَةً رَحِمَكُمُ اللهُ",
+          lt: "Shollu sunnatat-tarawihi rak'ataini jami'atan rahimakumullah",
+        },
+        10: {
+          ar: "أَمِيْرِ الْمُؤْمِنِيْن سَيِّدِنَا عَلِيِّ بْنِ أَبِي طَالِبٍ رَضِيَ اللهُ عَنْه",
+          lt: "Amiril mu'minin sayyidina 'Aliyyibni Abi Thalib radhiyallahu 'anh",
+        },
+        11: {
+          ar: "صَلُّوْا سُنَّةَ الْوِتْرِ رَكْعَتَيْنِ جَامِعَةً رَحِمَكُمُ اللهُ",
+          lt: "Shollu sunnatal-witri rak'ataini jami'atan rahimakumullah",
+        },
+      };
+
+      let mode = localStorage.getItem("prayMode") || "Muhammadiyah";
+      let currentStep = parseInt(localStorage.getItem("prayStep")) || 0;
+      let tadarus = JSON.parse(localStorage.getItem("tadarusData")) || [];
+
+      // Timer Variables
+      let startTime;
+      let timerInterval;
+      let totalSeconds = parseInt(localStorage.getItem("praySeconds")) || 0;
+
+      function updateTime() {
+        const now = new Date();
+        document.getElementById("clock").innerText = now.toLocaleTimeString(
+          "id-ID",
+          { hour: "2-digit", minute: "2-digit" },
+        );
+      }
+      setInterval(updateTime, 1000);
+      updateTime();
+
+      function startTimer() {
+        if (timerInterval) return;
+
+        // Tampilkan waktu yang tersimpan segera saat fungsi dipanggil
+        updateTimerDisplay();
+
+        timerInterval = setInterval(() => {
+          totalSeconds++;
+          updateTimerDisplay();
+
+          // Simpan setiap detik agar saat refresh tidak hilang
+          localStorage.setItem("praySeconds", totalSeconds);
+        }, 1000);
+      }
+
+      function updateTimerDisplay() {
+        const mins = Math.floor(totalSeconds / 60)
+          .toString()
+          .padStart(2, "0");
+        const secs = (totalSeconds % 60).toString().padStart(2, "0");
+        document.getElementById("statusLabel").innerText = `${mins}:${secs}`;
+      }
+
+      function stopTimer() {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      function openModal(id) {
+        document.getElementById(id).classList.add("modal-active");
+      }
+      function closeModal(id) {
+        document.getElementById(id).classList.remove("modal-active");
+      }
+
+      function setMode(m) {
+        mode = m;
+        currentStep = 0;
+        totalSeconds = 0;
+        stopTimer();
+        saveState();
+        renderUI();
+      }
+
+      function renderUI() {
+        const isM = mode === "Muhammadiyah";
+
+        // Switch styling tombol Mahzab
+        document.getElementById("btnM").className = isM
+          ? "flex-1 py-2 text-[10px] font-black rounded-xl bg-slate-900 text-white shadow-md uppercase tracking-widest"
+          : "flex-1 py-2 text-[10px] font-black rounded-xl text-slate-400 uppercase tracking-widest";
+        document.getElementById("btnNU").className = !isM
+          ? "flex-1 py-2 text-[10px] font-black rounded-xl bg-slate-900 text-white shadow-md uppercase tracking-widest"
+          : "flex-1 py-2 text-[10px] font-black rounded-xl text-slate-400 uppercase tracking-widest";
+
+        // Timeline Progress
+        const container = document.getElementById("timeline");
+        container.innerHTML = "";
+        config[mode].label.forEach((lab, i) => {
+          const stepIdx = i + 1;
+          const div = document.createElement("div");
+          div.className = `step-bubble ${stepIdx < currentStep ? "step-done" : ""} ${stepIdx === currentStep ? "step-active" : ""}`;
+          div.innerText = lab;
+          container.appendChild(div);
+        });
+
+        const data = config[mode];
+        const display = document.getElementById("currentStepDisplay");
+        const info = document.getElementById("rakaatInfo");
+        const mainBtn = document.getElementById("mainBtn");
+
+        // --- LOGIKA BACAAN BILAL (KHUSUS NU) ---
+        const bilalBox = document.getElementById("bilalContainer");
+        const bilalTxt = document.getElementById("bilalText"); // Untuk Arab
+        const bilalLat = document.getElementById("bilalLatin"); // Untuk Latin
+
+        if (!isM && currentStep > 0 && bilalData[currentStep]) {
+          bilalBox.classList.remove("hidden");
+          // Masukkan teks Arab
+          bilalTxt.innerText = bilalData[currentStep].ar;
+          // Masukkan teks Latin (pastikan ID bilalLatin ada di HTML)
+          if (bilalLat) {
+            bilalLat.innerText = bilalData[currentStep].lt;
+          }
+        } else {
+          bilalBox.classList.add("hidden");
+        }
+        // ---------------------------------------
+
+        if (currentStep === 0) {
+          display.innerText = "0";
+          info.innerText = "Klik mulai sholat";
+          document.getElementById("statusLabel").innerText = "READY";
+          mainBtn.innerHTML = `<span>MULAI TARAWIH</span> <i class="fa-solid fa-play text-xs"></i>`;
+          document.getElementById("surahName").innerText = "-";
+          document.getElementById("surahArabic").innerText = "---";
+        } else if (currentStep <= data.steps) {
+          startTimer();
+          display.innerText = currentStep;
+          info.innerText = `RAKAAT ${data.label[currentStep - 1]}`;
+
+          // Update Label Tombol Utama
+          mainBtn.innerHTML =
+            currentStep === data.steps
+              ? `<span>SELESAI</span> <i class="fa-solid fa-check"></i>`
+              : `<span>LANJUT KE ${currentStep + 1}</span> <i class="fa-solid fa-chevron-right text-xs"></i>`;
+
+          // Update Saran Surat
+          const sName = data.surah[currentStep - 1];
+          document.getElementById("surahName").innerText = sName || "-";
+          document.getElementById("surahArabic").innerText = (
+            surahData[sName] || { arabic: "---" }
+          ).arabic;
+        } else {
+          stopTimer();
+          display.innerText = "✓";
+          info.innerText = "Alhamdulillah Selesai";
+          mainBtn.innerHTML = `<span>ULANGI</span> <i class="fa-solid fa-rotate-left"></i>`;
+
+          // Sembunyikan bilal saat selesai
+          if (bilalBox) bilalBox.classList.add("hidden");
         }
 
-        // Fungsi Select All Text
-        function selectAllText(id) {
-            const node = document.getElementById(id);
-            if (document.body.createTextRange) {
-                const range = document.body.createTextRange();
-                range.moveToElementText(node);
-                range.select();
-            } else if (window.getSelection) {
-                const selection = window.getSelection();
-                const range = document.createRange();
-                range.selectNodeContents(node);
-                selection.removeAllRanges();
-                selection.addRange(range);
-            }
+        renderTadarus();
+      }
+
+      function nextStep() {
+        if (currentStep >= config[mode].steps) {
+          const finalTime = document.getElementById("statusLabel").innerText;
+          stopTimer();
+          Swal.fire({
+            title: "Alhamdulillah!",
+            html: `Ibadah selesai dalam waktu <br><b class="text-sage-dark text-xl">${finalTime}</b>`,
+            icon: "success",
+            confirmButtonColor: "#3e4d3e",
+          });
+          currentStep++;
+          renderUI();
+        } else {
+          currentStep++;
+          saveState();
+          renderUI();
         }
+      }
 
-        // Panggil fungsi saat window load
-        window.onload = () => {
-            populateSurahSelect();
-            renderUI(); // Render UI Anda yang sudah ada
-        };
-        const config = {
-            Muhammadiyah: {
-                steps: 5,
-                label: ['1-2', '3-4', '5-6', '7-8', 'W1-3'],
-                surah: ['Al-Maun', 'Al-Kautsar', 'Al-Kafirun', 'An-Nashr', 'Al-Ikhlas']
-            },
-            NU: {
-                steps: 12,
-                label: ['1-2', '3-4', '5-6', '7-8', '9-10', '11-12', '13-14', '15-16', '17-18', '19-20', 'W1-2', 'W3'],
-                surah: ['At-Takasur', 'Al-Ashr', 'Al-Humazah', 'Al-Fil', 'Quraysh', 'Al-Maun', 'Al-Kautsar', 'Al-Kafirun', 'An-Nashr', 'Al-Lahab', 'Al-A\'la', 'Al-Ikhlas']
-            }
-        };
-
-        const surahData = {
-            'Al-Maun': {
-                arabic: 'أَرَأَيْتَ الَّذِي يُكَذِّبُ بِالدِّينِ',
-                full: `أَرَأَيْتَ الَّذِي يُكَذِّبُ بِ<span style="color:#3b82f6">الدِّي</span>نِ ۝ فَذَٰلِكَ الَّذِي يَدُعُّ الْيَتِيمَ ۝ وَلَا يَحُضُّ عَلَىٰ طَعَامِ الْمِسْكِينِ ۝ فَوَيْلٌ لِّلْمُصَلِّينَ ۝ الَّذِينَ هُمْ عَن صَلَاتِهِمْ سَاهُونَ ۝ الَّذِينَ هُمْ يُرَاءُونَ ۝ وَيَمْنَعُونَ الْ<span style="color:#ff0000">مَا</span>عُونَ ۝`
-            },
-            'Al-Kautsar': {
-                arabic: 'إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ',
-                full: `<span style="color:#ff0000">إِنَّ</span>ا أَعْطَيْنَاكَ الْكَوْثَرَ ۝ فَصَلِّ لِرَبِّكَ وَا<span style="color:#3b82f6">نْحَ</span>رْ ۝ <span style="color:#ff0000">إِنَّ</span> شَانِئَكَ هُوَ الْأَ<span style="color:#3b82f6">بْ</span>تَرُ ۝`
-            },
-            'Al-Kafirun': {
-                arabic: 'قُلْ يَا أَيُّهَا الْكَافِرُونَ',
-                full: `قُلْ يَا أَيُّهَا الْكَافِرُونَ ۝ لَا أَعْبُدُ مَا تَعْبُدُونَ ۝ وَلَا أَ<span style="color:#008000">نـتُ</span>مْ عَابِدُونَ مَا أَعْبُدُ ۝ وَلَا أَنَا عَابِدٌ مَّا عَبَد<span style="color:#ff0000">تُّ</span>مْ ۝ وَلَا أَ<span style="color:#008000">نـتُ</span>مْ عَابِدُونَ مَا أَعْبُدُ ۝ لَكُمْ دِينُكُمْ وَلِيَ دِينِ ۝`
-            },
-            'An-Nashr': {
-                arabic: 'إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ',
-                full: `إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ ۝ وَرَأَيْتَ ا<span style="color:#ff0000">لنَّ</span>اسَ يَدْخُلُونَ فِي دِينِ اللَّهِ أَفْوَاجًا ۝ فَسَبِّحْ بِحَمْدِ رَبِّكَ وَاسْتَغْفِرْهُ <span style="color:#ff0000">إِنَّ</span>هُ كَانَ تَوَّابًا ۝`
-            },
-            'Al-Ikhlas': {
-                arabic: 'قُلْ هُوَ اللَّهُ أَحَدٌ',
-                full: `قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ ا<span style="color:#ff0000">لصَّ</span>مَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ ۝`
-            },
-            'At-Takasur': {
-                arabic: 'أَلْهَاكُمُ التَّكَاثُرُ',
-                full: `أَلْهَاكُمُ التَّكَاثُرُ ۝ حَتَّىٰ زُرْتُمُ الْمَقَابِرَ ۝ كَلَّا سَوْفَ تَعْلَمُونَ ۝ ثُمَّ كَلَّا سَوْفَ تَعْلَمُونَ ۝ كَلَّا لَوْ تَعْلَمُونَ عِلْمَ الْيَقِينِ ۝ لَتَرَوُنَّ الْجَحِيمَ ۝ ثُمَّ لَتَرَوُنَّهَا عَيْنَ الْيَقِينِ ۝ ثُمَّ لَتُسْأَلُ<span style="color:#ff0000">نَّ</span> يَوْمَئِذٍ عَنِ ا<span style="color:#ff0000">لنَّ</span>عِيمِ ۝`
-            },
-            'Al-Ashr': {
-                arabic: 'وَالْعَصْرِ',
-                full: `وَالْعَصْرِ ۝ <span style="color:#ff0000">إِنَّ</span> الْإِ<span style="color:#008000">نـسَ</span>انَ لَفِي خُسْرٍ ۝ إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا ا<span style="color:#ff0000">لصَّ</span>الِحَاتِ ۝ وَتَوَاصَوْا بِالْحَقِّ وَتَوَاصَوْا بِا<span style="color:#ff0000">لصَّ</span>بْرِ ۝`
-            },
-            'Al-Humazah': {
-                arabic: 'وَيْلٌ لِّكُلِّ هُمَزةٍ لُّمَزَةٍ',
-                full: `وَيْلٌ لِّكُلِّ هُمَزَةٍ لُّـمَزَةٍ ۝ الَّذِي جَمَعَ مَالًا وَعَدَّدَهُ ۝ يَحْسَبُ أَ<span style="color:#ff0000">نَّ</span> mَالَهُ أَخْلَدَهُ ۝ كَلَّا لَيُ<span style="color:#008000">نـبَ</span>ذَ<span style="color:#ff0000">نَّ</span> فِي الْحُطَمَةِ ۝ وَmَا أَدْرَاكَ mَا الْحُطَمَةُ ۝ نَارُ اللَّهِ الْمُوقَدَةُ ۝ الَّتِي تَطَّلِعُ عَلَى الْأَفْئِدَةِ ۝ <span style="color:#ff0000">إِنَّ</span>هَا عَلَيْهِم mُّؤْصَدَةٌ ۝ فِي عَمَدٍ mُّـmَدَّدَةٍ ۝`
-            },
-            'Al-Fil': {
-                arabic: 'أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَابِ الْفِيلِ',
-                full: `أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَابِ الْفِيلِ ۝ أَلَمْ يَجْعَلْ كَيْدَهُمْ فِي تَضْلِيلٍ ۝ وَأَرْسَلَ عَلَيْهِمْ طَيْرًا أَبَابِيلَ ۝ تَرْمِيهِم بِحِجَارَةٍ مِّن سِجِّيلٍ ۝ فَجَعَلَهُمْ كَعَصْفٍ مَّأْكُولٍ ۝`
-            },
-            'Quraysh': {
-                arabic: 'لِإِيلَافِ قُرَيْشٍ',
-                full: `لِإِيلَافِ قُرَيْشٍ ۝ إِيلَافِهِمْ رِحْلَةَ ا<span style="color:#ff0000">لشِّ</span>تَاءِ وَا<span style="color:#ff0000">لصَّ</span>يْفِ ۝ فَلْيَعْبُدُوا رَبَّ هَٰذَا الْبَيْتِ ۝ الَّذِي أَطْعَمَهُم مِّن جُوعٍ وَآمَنَهُم مِّنْ خَوْفٍ ۝`
-            },
-            'Al-Lahab': {
-                arabic: 'تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ',
-                full: `تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ ۝ مَا أَغْنَىٰ عَنْهُ مَالُهُ وَمَا كَسَبَ ۝ سَيَصْلَىٰ نَارًا ذَاتَ لَهَبٍ ۝ وَامْرَأَتُهُ حَمَّالَةَ الْحَطَبِ ۝ فِي جِيدِهَا حَبْلٌ مِّن مَّسَدٍ ۝`
-            },
-            'Al-A\'la': {
-                arabic: 'سَبِّحِ اسْمَ رَبِّكَ الْأَعْلَى',
-                full: `سَبِّحِ اسْمَ رَبِّكَ الْأَعْلَى ۝ الَّذِي خَلَقَ فَسَوَّىٰ ۝ وَالَّذِي قَدَّرَ فَهَدَىٰ ۝ وَالَّذِي أَخْرَجَ الْمَرْعَىٰ ۝ فَجَعَلَهُ غُثَاءً أَحْوَىٰ ۝ سَنُقْرِئُكَ فَلَا تَ<span style="color:#008000">نـسَ</span>ىٰ ۝ إِلَّا مَا شَاءَ اللَّهُ <span style="color:#ff0000">إِنَّ</span>هُ يَعْلَمُ الْجهرَ وَمَا يَخْفَىٰ ۝`
-            }
-        };
-
-
-        const bilalData = {
-            1: {
-                ar: "صَلُّوْا سُنَّةَ التَّرَاوِيْحِ رَكْعَتَيْنِ جَامِعَةً رَحِمَكُمُ اللهُ",
-                lt: "Shollu sunnatat-tarawihi rak'ataini jami'atan rahimakumullah"
-            },
-            2: {
-                ar: "فَضْلًا مِنَ اللهِ وَنِعْمَةً، وَمَغْفِرَةً وَرَحْمَةً",
-                lt: "Fadhlan minallahi wa ni'matan, wa maghfiratan wa rahmatan"
-            },
-            3: {
-                ar: "صَلُّوْا سُنَّةَ التَّرَاوِيْحِ رَكْعَتَيْنِ جَامِعَةً رَحِمَكُمُ اللهُ",
-                lt: "Shollu sunnatat-tarawihi rak'ataini jami'atan rahimakumullah"
-            },
-            4: {
-                ar: "أَمِيْرِ الْمُؤْمِنِيْن سَيِّدِنَا أَبِي بَكْرِ الصِّدِّيْقِ رَضِيَ اللهُ عَنْه",
-                lt: "Amiril mu'minin sayyidina Abi Bakrinis-Shiddiq radhiyallahu 'anh"
-            },
-            5: {
-                ar: "صَلُّوْا سُنَّةَ التَّرَاوِيْحِ رَكْعَتَيْنِ جَامِعَةً رَحِمَكُمُ اللهُ",
-                lt: "Shollu sunnatat-tarawihi rak'ataini jami'atan rahimakumullah"
-            },
-            6: {
-                ar: "أَمِيْرِ الْمُؤْمِنِيْن سَيِّدِنَا عُمَرَ بْنِ الْخَطَّابِ رَضِيَ اللهُ عَنْه",
-                lt: "Amiril mu'minin sayyidina 'Umarabnil-Khathab radhiyallahu 'anh"
-            },
-            7: {
-                ar: "صَلُّوْا سُنَّةَ التَّرَاوِيْحِ رَكْعَتَيْنِ جَامِعَةً رَحِمَكُمُ اللهُ",
-                lt: "Shollu sunnatat-tarawihi rak'ataini jami'atan rahimakumullah"
-            },
-            8: {
-                ar: "أَمِيْرِ الْمُؤْمِنِيْن سَيِّدِنَا عُثْمَانَ بْنِ عَفَّانَ رَضِيَ اللهُ عَنْه",
-                lt: "Amiril mu'minin sayyidina 'Utsmanabni 'Affan radhiyallahu 'anh"
-            },
-            9: {
-                ar: "صَلُّوْا سُنَّةَ التَّرَاوِيْحِ رَكْعَتَيْنِ جَامِعَةً رَحِمَكُمُ اللهُ",
-                lt: "Shollu sunnatat-tarawihi rak'ataini jami'atan rahimakumullah"
-            },
-            10: {
-                ar: "أَمِيْرِ الْمُؤْمِنِيْن سَيِّدِنَا عَلِيِّ بْنِ أَبِي طَالِبٍ رَضِيَ اللهُ عَنْه",
-                lt: "Amiril mu'minin sayyidina 'Aliyyibni Abi Thalib radhiyallahu 'anh"
-            },
-            11: {
-                ar: "صَلُّوْا سُنَّةَ الْوِتْرِ رَكْعَتَيْنِ جَامِعَةً رَحِمَكُمُ اللهُ",
-                lt: "Shollu sunnatal-witri rak'ataini jami'atan rahimakumullah"
-            }
-        };
-
-
-        let mode = localStorage.getItem('prayMode') || 'Muhammadiyah';
-        let currentStep = parseInt(localStorage.getItem('prayStep')) || 0;
-        let tadarus = JSON.parse(localStorage.getItem('tadarusData')) || [];
-
-        // Timer Variables
-        let startTime;
-        let timerInterval;
-        let totalSeconds = parseInt(localStorage.getItem('praySeconds')) || 0;
-
-        function updateTime() {
-            const now = new Date();
-            document.getElementById('clock').innerText = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+      function prevStep() {
+        if (currentStep > 0) {
+          currentStep--;
+          saveState();
+          renderUI();
         }
-        setInterval(updateTime, 1000); updateTime();
+      }
 
-        function startTimer() {
-            if (timerInterval) return;
+      function confirmReset() {
+        const finalTime = document.getElementById("statusLabel").innerText;
+        Swal.fire({
+          title: "Reset?",
+          html:
+            currentStep > 0
+              ? `Durasi terakhir: ${finalTime}`
+              : "Mulai ulang hitungan?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#3e4d3e",
+        }).then((r) => {
+          if (r.isConfirmed) {
+            currentStep = 0;
+            totalSeconds = 0; // Reset detik ke 0
+            stopTimer();
+            localStorage.removeItem("praySeconds"); // Hapus dari storage
+            saveState();
+            renderUI();
+          }
+        });
+      }
 
-            // Tampilkan waktu yang tersimpan segera saat fungsi dipanggil
-            updateTimerDisplay();
+      // TADARUS FUNCTIONS
+      function addTadarus() {
+        const s = document.getElementById("inputSurat").value;
+        const a = document.getElementById("inputAyat").value;
+        if (!s || !a) return;
+        tadarus.unshift({ surat: s, ayat: a, id: Date.now() });
+        localStorage.setItem("tadarusData", JSON.stringify(tadarus));
+        document.getElementById("inputSurat").value = "";
+        document.getElementById("inputAyat").value = "";
+        renderTadarus();
+      }
 
-            timerInterval = setInterval(() => {
-                totalSeconds++;
-                updateTimerDisplay();
+      function deleteTadarus(id) {
+        tadarus = tadarus.filter((t) => t.id !== id);
+        localStorage.setItem("tadarusData", JSON.stringify(tadarus));
+        renderTadarus();
+      }
 
-                // Simpan setiap detik agar saat refresh tidak hilang
-                localStorage.setItem('praySeconds', totalSeconds);
-            }, 1000);
-        }
-
-        function updateTimerDisplay() {
-            const mins = Math.floor(totalSeconds / 60).toString().padStart(2, '0');
-            const secs = (totalSeconds % 60).toString().padStart(2, '0');
-            document.getElementById('statusLabel').innerText = `${mins}:${secs}`;
-        }
-
-        function stopTimer() {
-            clearInterval(timerInterval);
-            timerInterval = null;
-        }
-        function openModal(id) { document.getElementById(id).classList.add('modal-active'); }
-        function closeModal(id) { document.getElementById(id).classList.remove('modal-active'); }
-
-        function setMode(m) { mode = m; currentStep = 0; totalSeconds = 0; stopTimer(); saveState(); renderUI(); }
-
-        function renderUI() {
-            const isM = mode === 'Muhammadiyah';
-
-            // Switch styling tombol Mahzab
-            document.getElementById('btnM').className = isM ? 'flex-1 py-2 text-[10px] font-black rounded-xl bg-slate-900 text-white shadow-md uppercase tracking-widest' : 'flex-1 py-2 text-[10px] font-black rounded-xl text-slate-400 uppercase tracking-widest';
-            document.getElementById('btnNU').className = !isM ? 'flex-1 py-2 text-[10px] font-black rounded-xl bg-slate-900 text-white shadow-md uppercase tracking-widest' : 'flex-1 py-2 text-[10px] font-black rounded-xl text-slate-400 uppercase tracking-widest';
-
-            // Timeline Progress
-            const container = document.getElementById('timeline');
-            container.innerHTML = '';
-            config[mode].label.forEach((lab, i) => {
-                const stepIdx = i + 1;
-                const div = document.createElement('div');
-                div.className = `step-bubble ${stepIdx < currentStep ? 'step-done' : ''} ${stepIdx === currentStep ? 'step-active' : ''}`;
-                div.innerText = lab;
-                container.appendChild(div);
-            });
-
-            const data = config[mode];
-            const display = document.getElementById('currentStepDisplay');
-            const info = document.getElementById('rakaatInfo');
-            const mainBtn = document.getElementById('mainBtn');
-
-            // --- LOGIKA BACAAN BILAL (KHUSUS NU) ---
-            const bilalBox = document.getElementById('bilalContainer');
-            const bilalTxt = document.getElementById('bilalText');   // Untuk Arab
-            const bilalLat = document.getElementById('bilalLatin');  // Untuk Latin
-
-            if (!isM && currentStep > 0 && bilalData[currentStep]) {
-                bilalBox.classList.remove('hidden');
-                // Masukkan teks Arab
-                bilalTxt.innerText = bilalData[currentStep].ar;
-                // Masukkan teks Latin (pastikan ID bilalLatin ada di HTML)
-                if (bilalLat) {
-                    bilalLat.innerText = bilalData[currentStep].lt;
-                }
-            } else {
-                bilalBox.classList.add('hidden');
-            }
-            // ---------------------------------------
-
-            if (currentStep === 0) {
-                display.innerText = "0";
-                info.innerText = "Klik mulai sholat";
-                document.getElementById('statusLabel').innerText = "READY";
-                mainBtn.innerHTML = `<span>MULAI TARAWIH</span> <i class="fa-solid fa-play text-xs"></i>`;
-                document.getElementById('surahName').innerText = "-";
-                document.getElementById('surahArabic').innerText = "---";
-            } else if (currentStep <= data.steps) {
-                startTimer();
-                display.innerText = currentStep;
-                info.innerText = `RAKAAT ${data.label[currentStep - 1]}`;
-
-                // Update Label Tombol Utama
-                mainBtn.innerHTML = currentStep === data.steps ?
-                    `<span>SELESAI</span> <i class="fa-solid fa-check"></i>` :
-                    `<span>LANJUT KE ${currentStep + 1}</span> <i class="fa-solid fa-chevron-right text-xs"></i>`;
-
-                // Update Saran Surat
-                const sName = data.surah[currentStep - 1];
-                document.getElementById('surahName').innerText = sName || "-";
-                document.getElementById('surahArabic').innerText = (surahData[sName] || { arabic: '---' }).arabic;
-
-            } else {
-                stopTimer();
-                display.innerText = "✓";
-                info.innerText = "Alhamdulillah Selesai";
-                mainBtn.innerHTML = `<span>ULANGI</span> <i class="fa-solid fa-rotate-left"></i>`;
-
-                // Sembunyikan bilal saat selesai
-                if (bilalBox) bilalBox.classList.add('hidden');
-            }
-
-            renderTadarus();
-        }
-
-        function nextStep() {
-            if (currentStep >= config[mode].steps) {
-                const finalTime = document.getElementById('statusLabel').innerText;
-                stopTimer();
-                Swal.fire({
-                    title: 'Alhamdulillah!',
-                    html: `Ibadah selesai dalam waktu <br><b class="text-sage-dark text-xl">${finalTime}</b>`,
-                    icon: 'success',
-                    confirmButtonColor: '#3e4d3e'
-                });
-                currentStep++;
-                renderUI();
-            }
-            else { currentStep++; saveState(); renderUI(); }
-        }
-
-        function prevStep() { if (currentStep > 0) { currentStep--; saveState(); renderUI(); } }
-
-        function confirmReset() {
-            const finalTime = document.getElementById('statusLabel').innerText;
-            Swal.fire({
-                title: 'Reset?',
-                html: currentStep > 0 ? `Durasi terakhir: ${finalTime}` : "Mulai ulang hitungan?",
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#3e4d3e'
-            }).then((r) => {
-                if (r.isConfirmed) {
-                    currentStep = 0;
-                    totalSeconds = 0; // Reset detik ke 0
-                    stopTimer();
-                    localStorage.removeItem('praySeconds'); // Hapus dari storage
-                    saveState();
-                    renderUI();
-                }
-            });
-        }
-
-        // TADARUS FUNCTIONS
-        function addTadarus() {
-            const s = document.getElementById('inputSurat').value;
-            const a = document.getElementById('inputAyat').value;
-            if (!s || !a) return;
-            tadarus.unshift({ surat: s, ayat: a, id: Date.now() });
-            localStorage.setItem('tadarusData', JSON.stringify(tadarus));
-            document.getElementById('inputSurat').value = '';
-            document.getElementById('inputAyat').value = '';
-            renderTadarus();
-        }
-
-        function deleteTadarus(id) {
-            tadarus = tadarus.filter(t => t.id !== id);
-            localStorage.setItem('tadarusData', JSON.stringify(tadarus));
-            renderTadarus();
-        }
-
-        function renderTadarus() {
-            const list = document.getElementById('tadarusList');
-            list.innerHTML = tadarus.map(t => `
+      function renderTadarus() {
+        const list = document.getElementById("tadarusList");
+        list.innerHTML = tadarus
+          .map(
+            (t) => `
                 <div class="tadarus-card bg-slate-50 p-3 rounded-xl flex justify-between items-center shadow-sm">
                     <div>
                         <p class="text-[10px] font-black text-slate-700 uppercase">${t.surat}</p>
@@ -836,40 +1252,45 @@
                         <i class="fa-solid fa-trash-can text-xs"></i>
                     </button>
                 </div>
-            `).join('');
-        }
+            `,
+          )
+          .join("");
+      }
 
-        function saveState() {
-            localStorage.setItem('prayMode', mode);
-            localStorage.setItem('prayStep', currentStep);
-            localStorage.setItem('praySeconds', totalSeconds); // Tambahkan ini
-        }
+      function saveState() {
+        localStorage.setItem("prayMode", mode);
+        localStorage.setItem("prayStep", currentStep);
+        localStorage.setItem("praySeconds", totalSeconds); // Tambahkan ini
+      }
 
-        function showSurahDetail() {
-            if (currentStep === 0 || currentStep > config[mode].steps) return;
-            const sName = config[mode].surah[currentStep - 1];
-            document.getElementById('detailSurahTitle').innerText = sName;
+      function showSurahDetail() {
+        if (currentStep === 0 || currentStep > config[mode].steps) return;
+        const sName = config[mode].surah[currentStep - 1];
+        document.getElementById("detailSurahTitle").innerText = sName;
 
-            // GUNAKAN innerHTML (bukan innerText) agar warna muncul
-            document.getElementById('detailSurahArabic').innerHTML = (surahData[sName] || { full: 'Teks tidak tersedia' }).full;
+        // GUNAKAN innerHTML (bukan innerText) agar warna muncul
+        document.getElementById("detailSurahArabic").innerHTML = (
+          surahData[sName] || { full: "Teks tidak tersedia" }
+        ).full;
 
-            openModal('modalSurah');
-        }
+        openModal("modalSurah");
+      }
 
-        function confirmModeChange(newMode) {
-            if (currentStep > 0 && mode !== newMode) {
-                Swal.fire({
-                    title: 'Ganti Mahzab?',
-                    text: "Hitungan akan direset.",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3e4d3e'
-                }).then((r) => { if (r.isConfirmed) setMode(newMode); });
-            } else setMode(newMode);
-        }
+      function confirmModeChange(newMode) {
+        if (currentStep > 0 && mode !== newMode) {
+          Swal.fire({
+            title: "Ganti Mahzab?",
+            text: "Hitungan akan direset.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3e4d3e",
+          }).then((r) => {
+            if (r.isConfirmed) setMode(newMode);
+          });
+        } else setMode(newMode);
+      }
 
-        renderUI();
+      renderUI();
     </script>
-</body>
-
+  </body>
 </html>

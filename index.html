@@ -165,6 +165,24 @@
         font-size: 0.8rem;
         opacity: 0.5;
       }
+
+      /* Tambahkan di dalam <style> Anda */
+      .arabic {
+        font-family:
+          "Amiri", serif; /* Pastikan font ini di-import dari Google Fonts */
+        direction: rtl;
+        line-height: 1.6; /* Memberikan ruang untuk harakat atas/bawah */
+      }
+
+      /* Memastikan elemen absolute tidak tertutup jika text sangat panjang */
+      .relative {
+        width: 100%;
+      }
+
+      /* Styling transisi agar perpindahan rakaat terasa halus */
+      #surahContainer {
+        transition: all 0.3s ease-in-out;
+      }
     </style>
   </head>
 
@@ -179,7 +197,7 @@
         </div>
         <span
           class="text-[9px] font-black uppercase tracking-[0.4em] text-sage-dark/40"
-          >Tarawih-MU</span
+          >Tarawih Go</span
         >
         <div class="flex items-center gap-2 text-slate-400">
           <span
@@ -211,13 +229,13 @@
           onclick="confirmModeChange('Muhammadiyah')"
           id="btnM"
           class="flex-1 py-2 text-[10px] font-black rounded-xl transition-all uppercase tracking-widest">
-          Muhammadiyah
+          Muhammadiyah (11)
         </button>
         <button
           onclick="confirmModeChange('NU')"
           id="btnNU"
           class="flex-1 py-2 text-[10px] font-black rounded-xl transition-all uppercase tracking-widest text-slate-400">
-          NU (20)
+          NU (23)
         </button>
       </div>
 
@@ -262,26 +280,30 @@
             id="bilalLatin"
             class="text-[9px] font-bold text-emerald-700/60 uppercase tracking-tighter italic font-sans leading-tight"></div>
         </div>
-
         <div
-          class="bg-slate-50 border border-slate-100 rounded-2xl p-4 text-left cursor-pointer btn-action"
+          class="bg-slate-50 border border-slate-100 rounded-3xl p-5 cursor-pointer btn-action hover:bg-slate-100 transition-all shadow-sm"
           onclick="showSurahDetail()">
-          <div class="flex justify-between items-center mb-2">
+          <div class="flex justify-between items-center mb-4">
             <span
-              class="text-[9px] font-black text-slate-400 uppercase tracking-widest"
+              class="text-[10px] font-black text-slate-400 uppercase tracking-widest"
               >Saran Surat</span
             >
-            <i
-              class="fa-solid fa-arrow-right-long text-[10px] text-slate-300"></i>
+            <div
+              class="flex items-center gap-1 bg-emerald-100 px-2 py-0.5 rounded-full">
+              <span class="text-[8px] font-bold text-emerald-600 uppercase"
+                >Detail</span
+              >
+              <i
+                class="fa-solid fa-chevron-right text-[7px] text-emerald-500"></i>
+            </div>
           </div>
-          <div id="surahName" class="text-sm font-extrabold text-slate-700">
-            -
-          </div>
+
           <div
-            id="surahArabic"
-            class="arabic truncate mt-1"
-            style="text-align: center">
-            ---
+            id="surahContainer"
+            class="flex flex-col gap-5 min-h-[120px] justify-center">
+            <div class="text-center animate-pulse text-slate-300 text-xs">
+              Menunggu Mulai...
+            </div>
           </div>
         </div>
       </main>
@@ -623,25 +645,25 @@
           <div class="border-t border-slate-50 pt-6">
             <p
               class="text-[9px] font-bold text-emerald-800/80 italic leading-relaxed uppercase tracking-tight font-sans">
-              "Allahummaj’alna bil imani kamilin, wa lil faraidzi muaddin, wa
-              lish-shalati hafidzin, wa liz-zakati fa’ilin, wa lima ‘indaka
-              thalibin, wa li ‘afwika rajin, wa bil huda mutamassikin, wa ‘anil
-              laghwi mu’ridzin, wa fid-dunya zahidin, wa fil akhirati raghibin,
-              wa bil qadhai radzin, wa lin-na’ma’i syakirin, wa ‘alal bala’i
-              shabirin, wa tahta liwa’i sayyidina muhammadin shallallahu ‘alaihi
-              wasallam yaumal qiyamati sa’irin, wa ilal haudhi waridin, wa fil
-              jannati dakhilin, wa minan nari najin, wa ‘ala sariril karamati
-              qa’idin, wa bihurin ‘in mutazawwijin, wa min sundusin wa
-              istabraqin wa dibajin mutalabbisin, wa min tha’amil jannati
-              akilin, wa min labanin wa ‘asalin mushaffan syaribin, bi’akwabin
-              wa abariqa wa ka’sin min ma’in ma’alladzina an’amta ‘alaihim minan
-              nabiyyina wash shiddiqina wasy syuhada’i wash shalihin wa hasuna
-              ula’ika rafiqa, dzalikal fadhlu minallahi wa kafa billahi ‘alima.
-              Allahummaj’alna fi hadzihil lailatisy syahrisy syarifatil
-              mubarakati minas su’ada’il maqbuliin, wa la taj’alna minal
-              asyqiya’il marduudin, wa shallallahu ‘ala sayyidina muhammadin wa
-              alihi wa shahbihi ajma’in, birahmatika ya arhamar rahimin, wal
-              hamdu lillahi rabbil ‘alamin."
+              "Allahummaj`alna bil imani kamilin, wa lil faraidzi muaddin, wa
+              lish-shalati hafidzin, wa liz-zakati fa`ilin, wa lima `indaka
+              thalibin, wa li `afwika rajin, wa bil huda mutamassikin, wa `anil
+              laghwi mu`ridzin, wa fid-dunya zahidin, wa fil akhirati raghibin,
+              wa bil qadhai radzin, wa lin-na`ma`i syakirin, wa `alal bala`i
+              shabirin, wa tahta liwa`i sayyidina muhammadin shallallahu `alaihi
+              wasallam yaumal qiyamati sa`irin, wa ilal haudhi waridin, wa fil
+              jannati dakhilin, wa minan nari najin, wa `ala sariril karamati
+              qa`idin, wa bihurin `in mutazawwijin, wa min sundusin wa
+              istabraqin wa dibajin mutalabbisin, wa min tha`amil jannati
+              akilin, wa min labanin wa `asalin mushaffan syaribin, bi`akwabin
+              wa abariqa wa ka`sin min ma`in ma`alladzina an`amta `alaihim minan
+              nabiyyina wash shiddiqina wasy syuhada`i wash shalihin wa hasuna
+              ula`ika rafiqa, dzalikal fadhlu minallahi wa kafa billahi `alima.
+              Allahummaj`alna fi hadzihil lailatisy syahrisy syarifatil
+              mubarakati minas su`ada`il maqbuliin, wa la taj`alna minal
+              asyqiya`il marduudin, wa shallallahu `ala sayyidina muhammadin wa
+              alihi wa shahbihi ajma`in, birahmatika ya arhamar rahimin, wal
+              hamdu lillahi rabbil `alamin."
             </p>
           </div>
 
@@ -939,12 +961,13 @@
         Muhammadiyah: {
           steps: 5,
           label: ["1-2", "3-4", "5-6", "7-8", "W1-3"],
+          // Setiap index berisi [Surah Rakaat 1, Surah Rakaat 2]
           surah: [
-            "Al-Maun",
-            "Al-Kautsar",
-            "Al-Kafirun",
-            "An-Nashr",
-            "Al-Ikhlas",
+            ["Al-Baqarah-225", "Ad-Duha"],
+            ["Al-Baqarah-7", "At-Takasur"],
+            ["Al-Baqarah-285", "Al-Maun"],
+            ["Al-Baqarah-286", "An-Nas"],
+            ["Al-A'la", "Al-Kafirun"], // Khusus Witir 3 Rakaat sekaligus
           ],
         },
         NU: {
@@ -964,73 +987,151 @@
             "W3",
           ],
           surah: [
-            "At-Takasur",
-            "Al-Ashr",
-            "Al-Humazah",
-            "Al-Fil",
-            "Quraysh",
-            "Al-Maun",
-            "Al-Kautsar",
-            "Al-Kafirun",
-            "An-Nashr",
-            "Al-Lahab",
-            "Al-A'la",
-            "Al-Ikhlas",
+            ["At-Takasur", "Al-Ikhlas"],
+            ["Al-Ashr", "Al-Ikhlas"],
+            ["Al-Humazah", "Al-Ikhlas"],
+            ["Al-Fil", "Al-Ikhlas"],
+            ["Quraysh", "Al-Ikhlas"],
+            ["Al-Maun", "Al-Ikhlas"],
+            ["Al-Kautsar", "Al-Ikhlas"],
+            ["Al-Kafirun", "Al-Ikhlas"],
+            ["An-Nashr", "Al-Ikhlas"],
+            ["Al-Lahab", "Al-Ikhlas"],
+            ["Al-A'la", "Al-Kafirun"], // Witir Rakaat 1-2
+            ["Al-Ikhlas", "Al-Falaq"], // Witir Rakaat 3
           ],
         },
       };
 
       const surahData = {
+        "Al-Ikhlas": {
+          arabic: "قُلْ هُوَ اللَّهُ أَحَدٌ",
+          full: `قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ ا<span style="color:#ff0000">لصَّ</span>مَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ ۝`,
+          latin:
+            "Qul huwallaahu ahad. Allaahush shamad. Lam yalid walam yuulad. Walam yakul lahuu kufuwan ahad.",
+        },
+        "Al-Falaq": {
+          arabic: "قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ",
+          full: `قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ۝ مِن شَرِّ مَا خَلَقَ ۝ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ۝ وَمِن <span style="color:#ff0000">شَرِّ النَّ</span>فَّاثَاتِ فِي الْعُقَدِ ۝ وَمِن <span style="color:#008000">شَرِّ حَ</span>اسِدٍ إِذَا حَسَدَ ۝`,
+          latin:
+            "Qul a’uudzu birabbil falaq. Min syarri maa khalaq. Wa min syarri ghaasiqin idzaa waqab. Wa min syarrin naffaatsaati fil ‘uqad. Wa min syarri haasidin idzaa hasad.",
+        },
+        "An-Nas": {
+          arabic: "قُلْ أَعُوذُ بِرَبِّ النَّاسِ",
+          full: `قُلْ أَعُوذُ بِرَبِّ ا<span style="color:#ff0000">لنَّ</span>اسِ ۝ مَلِكِ ا<span style="color:#ff0000">لنَّ</span>اسِ ۝ إِلَٰهِ ا<span style="color:#ff0000">لنَّ</span>اسِ ۝ مِن شَرِّ الْوَسْوَاسِ ا<span style="color:#ff0000">لخَ</span>نَّاسِ ۝ الَّذِي يُوَسْوِسُ فِي صُدُورِ ا<span style="color:#ff0000">لنَّ</span>اسِ ۝ مِنَ الْ<span style="color:#008000">جِنَّ</span>ةِ وَا<span style="color:#ff0000">لنَّ</span>اسِ ۝`,
+          latin:
+            "Qul a’uudzu birabbin naas. Malikin naas. Ilaahin naas. Min syarril waswaasil khannaas. Alladzii yuwaswisu fii shuduurin naas. Minal jinnati wannaas.",
+        },
         "Al-Maun": {
-          arabic: "أَرَأَيْتَ الَّذِي يُكَذِّبُ بِالدِّينِ",
-          full: `أَرَأَيْتَ الَّذِي يُكَذِّبُ بِ<span style="color:#3b82f6">الدِّي</span>نِ ۝ فَذَٰلِكَ الَّذِي يَدُعُّ الْيَتِيمَ ۝ وَلَا يَحُضُّ عَلَىٰ طَعَامِ الْمِسْكِينِ ۝ فَوَيْلٌ لِّلْمُصَلِّينَ ۝ الَّذِينَ هُمْ عَن صَلَاتِهِمْ سَاهُونَ ۝ الَّذِينَ هُمْ يُرَاءُونَ ۝ وَيَمْنَعُونَ الْ<span style="color:#ff0000">مَا</span>عُونَ ۝`,
+          arabic: "أَرَأَيْتَ الَّذِي يُكَذِّبُ بِالدِّينِ",
+          full: `أَرَأَيْتَ الَّذِي يُكَذِّبُ بِ<span style="color:#3b82f6">الدِّي</span>نِ ۝ فَذَٰلِكَ الَّذِي يَدُعُّ الْيَتِيمَ ۝ وَلَا يَحُضُّ عَلَىٰ طَعَامِ الْمِسْكِينِ ۝ فَوَيْلٌ لِّلْمُصَلِّينَ ۝ الَّذِينَ هُمْ عَن صَلَاتِهِمْ سَاهُونَ ۝ الَّذِينَ هُمْ يُرَاءُونَ ۝ وَيَمْنَعُونَ الْ<span style="color:#ff0000">مَا</span>عُونَ ۝`,
+          latin:
+            "Ara-aitalladzii yukadzdzibu biddiin. Fadzaalikalladzii yadu`ul yatiim. Walaa yahudh-dhu `alaa tha`aamil miskiin. Fawailul lil mushalliin. Alladziina hum `an shalaatihim saahuun. Alladziina hum yuraa-uun. Wa yamna`uunal maa`uun.",
         },
         "Al-Kautsar": {
-          arabic: "إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ",
-          full: `<span style="color:#ff0000">إِنَّ</span>ا أَعْطَيْنَاكَ الْكَوْثَرَ ۝ فَصَلِّ لِرَبِّكَ وَا<span style="color:#3b82f6">نْحَ</span>رْ ۝ <span style="color:#ff0000">إِنَّ</span> شَانِئَكَ هُوَ الْأَ<span style="color:#3b82f6">بْ</span>تَرُ ۝`,
+          arabic: "إِنَّا أَعْطَيْنَاكَ الْكَوْثَرَ",
+          full: `<span style="color:#ff0000">إِنَّ</span>ا أَعْطَيْنَاكَ الْكَوْثَرَ ۝ فَصَلِّ لِرَبِّكَ وَا<span style="color:#3b82f6">نْحَ</span>رْ ۝ <span style="color:#ff0000">إِنَّ</span> شَانِئَكَ هُوَ الْأَ<span style="color:#3b82f6">بْ</span>تَرُ ۝`,
+          latin:
+            "Innaa a`thainaakal kautsar. Fashalli lirabbika wanhar. Inna syaani-aka huwal abtar.",
         },
         "Al-Kafirun": {
-          arabic: "قُلْ يَا أَيُّهَا الْكَافِرُونَ",
-          full: `قُلْ يَا أَيُّهَا الْكَافِرُونَ ۝ لَا أَعْبُدُ مَا تَعْبُدُونَ ۝ وَلَا أَ<span style="color:#008000">نـتُ</span>مْ عَابِدُونَ مَا أَعْبُدُ ۝ وَلَا أَنَا عَابِدٌ مَّا عَبَد<span style="color:#ff0000">تُّ</span>مْ ۝ وَلَا أَ<span style="color:#008000">نـتُ</span>مْ عَابِدُونَ مَا أَعْبُدُ ۝ لَكُمْ دِينُكُمْ وَلِيَ دِينِ ۝`,
+          arabic: "قُلْ يَا أَيُّهَا الْكَافِرُونَ",
+          full: `قُلْ يَا أَيُّهَا الْكَافِرُونَ ۝ لَا أَعْبُدُ مَا تَعْبُدُونَ ۝ وَلَا أَ<span style="color:#008000">نـتُ</span>مْ عَابِدُونَ مَا أَعْبُدُ ۝ وَلَا أَنَا عَابِدٌ مَّا عَبَد<span style="color:#ff0000">تُّ</span>مْ ۝ وَلَا أَ<span style="color:#008000">نـتُ</span>مْ عَابِدُونَ مَا أَعْبُدُ ۝ لَكُمْ دِينُكُمْ وَلِيَ دِينِ ۝`,
+          latin:
+            "Qul yaa ayyuhal kaafiruun. Laa a`budu maa ta`buduun. Walaa antum `aabiduuna maa a`bud. Walaa ana `aabidum maa `abadtum. Walaa antum `aabiduuna maa a`bud. Lakum diinukum waliya diin.",
         },
         "An-Nashr": {
-          arabic: "إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ",
-          full: `إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ ۝ وَرَأَيْتَ ا<span style="color:#ff0000">لنَّ</span>اسَ يَدْخُلُونَ فِي دِينِ اللَّهِ أَفْوَاجًا ۝ فَسَبِّحْ بِحَمْدِ رَبِّكَ وَاسْتَغْفِرْهُ <span style="color:#ff0000">إِنَّ</span>هُ كَانَ تَوَّابًا ۝`,
+          arabic: "إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ",
+          full: `إِذَا جَاءَ نَصْرُ اللَّهِ وَالْفَتْحُ ۝ وَرَأَيْتَ ا<span style="color:#ff0000">لنَّ</span>اسَ يَدْخُلُونَ فِي دِينِ اللَّهِ أَفْوَاجًا ۝ فَسَبِّحْ بِحَمْدِ رَبِّكَ وَاسْتَغْفِرْهُ <span style="color:#ff0000">إِنَّ</span>هُ كَانَ تَوَّابًا ۝`,
+          latin:
+            "Idzaa jaa-a nashrullaahi wal fath. Wa ra-aitan naasa yadkhuluuna fii diinillaahi afwaajaa. Fasabbih bihamdi rabbika wastaghfirhu innahuu kaana tawwaabaa.",
         },
         "Al-Ikhlas": {
-          arabic: "قُلْ هُوَ اللَّهُ أَحَدٌ",
-          full: `قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ ا<span style="color:#ff0000">لصَّ</span>مَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ ۝`,
+          arabic: "قُلْ هُوَ اللَّهُ أَحَدٌ",
+          full: `قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ ا<span style="color:#ff0000">لصَّ</span>مَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ ۝`,
+          latin:
+            "Qul huwallaahu ahad. Allaahush shamad. Lam yalid walam yuulad. Walam yakul lahuu kufuwan ahad.",
         },
         "At-Takasur": {
-          arabic: "أَلْهَاكُمُ التَّكَاثُرُ",
-          full: `أَلْهَاكُمُ التَّكَاثُرُ ۝ حَتَّىٰ زُرْتُمُ الْمَقَابِرَ ۝ كَلَّا سَوْفَ تَعْلَمُونَ ۝ ثُمَّ كَلَّا سَوْفَ تَعْلَمُونَ ۝ كَلَّا لَوْ تَعْلَمُونَ عِلْمَ الْيَقِينِ ۝ لَتَرَوُنَّ الْجَحِيمَ ۝ ثُمَّ لَتَرَوُنَّهَا عَيْنَ الْيَقِينِ ۝ ثُمَّ لَتُسْأَلُ<span style="color:#ff0000">نَّ</span> يَوْمَئِذٍ عَنِ ا<span style="color:#ff0000">لنَّ</span>عِيمِ ۝`,
+          arabic: "أَلْهَاكُمُ التَّكَاثُرُ",
+          full: `أَلْهَاكُمُ التَّكَاثُرُ ۝ حَتَّىٰ زُرْتُمُ الْمَقَابِرَ ۝ كَلَّا سَوْفَ تَعْلَمُونَ ۝ ثُمَّ كَلَّا سَوْفَ تَعْلَمُونَ ۝ كَلَّا لَوْ تَعْلَمُونَ عِلْمَ الْيَقِينِ ۝ لَتَرَوُنَّ الْجَحِيمَ ۝ ثُمَّ لَتَرَوُنَّهَا عَيْنَ الْيَقِينِ ۝ ثُمَّ لَتُسْأَلُ<span style="color:#ff0000">نَّ</span> يَوْمَئِذٍ عَنِ ا<span style="color:#ff0000">لنَّ</span>عِيمِ ۝`,
+          latin:
+            "Al-haakumut takaatsur. Hattaa zurtumul maqaabir. Kalla saufa ta`lamuun. Tsumma kalla saufa ta`lamuun. Kalla lau ta`lamuuna `ilmal yaqiin. Latarawunnal jahiim. Tsumma latarawunnahaa `ainal yaqiin. Tsumma latus-alunna yauma-idzin `anin na`iim.",
         },
         "Al-Ashr": {
           arabic: "وَالْعَصْرِ",
-          full: `وَالْعَصْرِ ۝ <span style="color:#ff0000">إِنَّ</span> الْإِ<span style="color:#008000">نـسَ</span>انَ لَفِي خُسْرٍ ۝ إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا ا<span style="color:#ff0000">لصَّ</span>الِحَاتِ ۝ وَتَوَاصَوْا بِالْحَقِّ وَتَوَاصَوْا بِا<span style="color:#ff0000">لصَّ</span>بْرِ ۝`,
+          full: `وَالْعَصْرِ ۝ <span style="color:#ff0000">إِنَّ</span> الْإِ<span style="color:#008000">نـسَ</span>انَ لَفِي خُسْرٍ ۝ إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا ا<span style="color:#ff0000">لصَّ</span>الِحَاتِ ۝ وَتَواصلَوْا بِالْحَقِّ وَتَوَاصَوْا بِا<span style="color:#ff0000">لصَّ</span>بْرِ ۝`,
+          latin:
+            "Wal `ashr. Innal insaana lafii khusr. Illalladziina aamanuu wa `amilush shaalihaati wa tawaashau bil haqqi wa tawaashau bish shabr.",
         },
         "Al-Humazah": {
           arabic: "وَيْلٌ لِّكُلِّ هُمَزةٍ لُّمَزَةٍ",
-          full: `وَيْلٌ لِّكُلِّ هُمَزَةٍ لُّـمَزَةٍ ۝ الَّذِي جَمَعَ مَالًا وَعَدَّدَهُ ۝ يَحْسَبُ أَ<span style="color:#ff0000">نَّ</span> mَالَهُ أَخْلَدَهُ ۝ كَلَّا لَيُ<span style="color:#008000">نـبَ</span>ذَ<span style="color:#ff0000">نَّ</span> فِي الْحُطَمَةِ ۝ وَmَا أَدْرَاكَ mَا الْحُطَمَةُ ۝ نَارُ اللَّهِ الْمُوقَدَةُ ۝ الَّتِي تَطَّلِعُ عَلَى الْأَفْئِدَةِ ۝ <span style="color:#ff0000">إِنَّ</span>هَا عَلَيْهِم mُّؤْصَدَةٌ ۝ فِي عَمَدٍ mُّـmَدَّدَةٍ ۝`,
+          full: `وَيْلٌ لِّكُلِّ هُمَزَةٍ لُّـمَزَةٍ ۝ الَّذِي جَمَعَ مَالًا وَعَدَّدَهُ ۝ يَحْسَبُ أَ<span style="color:#ff0000">نَّ</span> مَالَهُ أَخْلَدَهُ ۝ كَلَّا لَيُ<span style="color:#008000">نـبَ</span>ذَ<span style="color:#ff0000">نَّ</span> فِي الْحُطَمَةِ ۝ وَمَا أَدْرَاكَ مَا الْحُطَمَةُ ۝ نَارُ اللَّهِ الْمُوقَدَةُ ۝ الَّتِي تَطَّلِعُ عَلَى الْأَفْئِدَةِ ۝ <span style="color:#ff0000">إِنَّ</span>هَا عَلَيْهِم مُّؤْصَدَةٌ ۝ فِي عَمَدٍ مُّمَدَّدَةٍ ۝`,
+          latin:
+            "Wailul likulli humazatil lumazah. Alladzii jama`a maalaw wa `addadah. Yahsabu anna maalahuu akhladah. Kalla layumbadzanna fil huthamah. Wa maa adraaka mal huthamah. Naarullaahil muuqadah. Allatii tath-thali`u `alal af-idah. Innahaa `alaihim mu`shadah. Fii `amadim mumaddadah.",
         },
         "Al-Fil": {
-          arabic: "أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَابِ الْفِيلِ",
-          full: `أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَابِ الْفِيلِ ۝ أَلَمْ يَجْعَلْ كَيْدَهُمْ فِي تَضْلِيلٍ ۝ وَأَرْسَلَ عَلَيْهِمْ طَيْرًا أَبَابِيلَ ۝ تَرْمِيهِم بِحِجَارَةٍ مِّن سِجِّيلٍ ۝ فَجَعَلَهُمْ كَعَصْفٍ مَّأْكُولٍ ۝`,
+          arabic: "أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَابِ الْفِيلِ",
+          full: `أَلَمْ تَرَ كَيْفَ فَعَلَ رَبُّكَ بِأَصْحَابِ الْفِيلِ ۝ أَلَمْ يَجْعَلْ كَيْدَهُمْ فِي تَضْلِيلٍ ۝ وَأَرْسَلَ عَلَيْهِمْ طَيْرًا أَبَابِيلَ ۝ تَرْمِيهِم بِحِجَارَةٍ مِّن سِجِّيلٍ ۝ فَجَعَلَهُمْ كَعَصْفٍ مَّأْكُولٍ ۝`,
+          latin:
+            "Alam tara kaifa fa`ala rabbuka bi-ash-haabil fiil. Alam yaj`al kaidahum fii tadhliil. Wa arsala `alaihim thairan abaabiil. Tarmiihim bi hikaaratim min sijjiil. Faja`alahum ka`asfim ma`kuul.",
         },
         Quraysh: {
           arabic: "لِإِيلَافِ قُرَيْشٍ",
-          full: `لِإِيلَافِ قُرَيْشٍ ۝ إِيلَافِهِمْ رِحْلَةَ ا<span style="color:#ff0000">لشِّ</span>تَاءِ وَا<span style="color:#ff0000">لصَّ</span>يْفِ ۝ فَلْيَعْبُدُوا رَبَّ هَٰذَا الْبَيْتِ ۝ الَّذِي أَطْعَمَهُم مِّن جُوعٍ وَآمَنَهُم مِّنْ خَوْفٍ ۝`,
+          full: `لِإِيلَافِ قُرَيْشٍ ۝ إِيلَافِهِمْ رِحْلَةَ ا<span style="color:#ff0000">لشِّ</span>تَاءِ وَا<span style="color:#ff0000">لصَّ</span>يْفِ ۝ فَلْيَعْبُدُوا رَبَّ هَٰذَا الْبَيْتِ ۝ الَّذِي أَطْعَمَهُم مِّن جُوعٍ وَآمَنَهُم مِّنْ خَوْفٍ ۝`,
+          latin:
+            "Li-iilaafi quraisy. Iilaafihim rihlatasy syitaa-i wash shaif. Falya`buduu rabba haadzal bait. Alladzii ath`amahum min juu`iw wa aamanahum min khauf.",
         },
         "Al-Lahab": {
-          arabic: "تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ",
-          full: `تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ ۝ مَا أَغْنَىٰ عَنْهُ مَالُهُ وَمَا كَسَبَ ۝ سَيَصْلَىٰ نَارًا ذَاتَ لَهَبٍ ۝ وَامْرَأَتُهُ حَمَّالَةَ الْحَطَبِ ۝ فِي جِيدِهَا حَبْلٌ مِّن مَّسَدٍ ۝`,
+          arabic: "تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ",
+          full: `تَبَّتْ يَدَا أَبِي لَهَبٍ وَتَبَّ ۝ مَا أَغْنَىٰ عَنْهُ مَالُهُ وَمَا كَسَبَ ۝ سَيَصْلَىٰ نَارًا ذَاتَ لَهَبٍ ۝ وَامْرَأَتُهُ حَمَّالَةَ الْحَطَبِ ۝ فِي جِيدِهَا حَبْلٌ مِّن مَّسَدٍ ۝`,
+          latin:
+            "Tabbat yadaa abii lahabiw watabb. Maa aghnaa `anhu maaluhuu wa maa kasab. Sayashlaa naaran dzaata lahab. Wamra-atuhuu hammaalatal hathab. Fii jiidihaa hablum mim masad.",
         },
+
         "Al-A'la": {
           arabic: "سَبِّحِ اسْمَ رَبِّكَ الْأَعْلَى",
-          full: `سَبِّحِ اسْمَ رَبِّكَ الْأَعْلَى ۝ الَّذِي خَلَقَ فَسَوَّىٰ ۝ وَالَّذِي قَدَّرَ فَهَدَىٰ ۝ وَالَّذِي أَخْرَجَ الْمَرْعَىٰ ۝ فَجَعَلَهُ غُثَاءً أَحْوَىٰ ۝ سَنُقْرِئُكَ فَلَا تَ<span style="color:#008000">نـسَ</span>ىٰ ۝ إِلَّا مَا شَاءَ اللَّهُ <span style="color:#ff0000">إِنَّ</span>هُ يَعْلَمُ الْجهرَ وَمَا يَخْفَىٰ ۝`,
+          full: `سَبِّحِ اسْمَ رَبِّكَ الْأَعْلَى ۝ الَّذِي خَلَقَ فَسَوَّىٰ ۝ وَالَّذِي قَدَّرَ فَهَدَىٰ ۝ وَالَّذِي أَخْرَجَ الْمَرْعَىٰ ۝ فَجَعَلَهُ غُثَاءً أَحْوَىٰ ۝ سَنُقْرِئُكَ فَلَا تَ<span style="color:#008000">نـسَ</span>ىٰ ۝ إِلَّا مَا شَاءَ اللَّهُ <span style="color:#ff0000">إِنَّ</span>هُ يَعْلَمُ الْجَهْرَ وَمَا يَخْفَىٰ ۝ وَنُيَسِّرُكَ لِلْيُسْرَىٰ ۝ فَذَكِّرْ إِن <span style="color:#ff0000">نَّـ</span>فَعَتِ الذِّكْرَىٰ ۝ سَيَذَّكَّرُ مَن يَخْشَىٰ ۝ وَيَتَجَنَّبُهَا الْأَشْقَى ۝ الَّذِي يَصْلَى ال<span style="color:#ff0000">نَّـ</span>ارَ الْكُبْرَىٰ ۝ ثُمَّ لَا يَمُوتُ فِيهَا وَلَا يَحْيَىٰ ۝ قَدْ أَفْلَحَ مَن تَزَكَّىٰ ۝ وَذَكَرَ اسْمَ رَبِّهِ فَصَلَّىٰ ۝ بَلْ تُؤْثِرُونَ الْحَيَاةَ <span style="color:#3b82f6">الدُّ</span>نْيَا ۝ وَالْآخِرَةُ خَيْرٌ وَأَبْقَىٰ ۝ <span style="color:#ff0000">إِنَّ</span> هَٰذَا لَفِي ال<span style="color:#3b82f6">صُّـ</span>حُفِ الْأُولَىٰ ۝ صُحُفِ إِبْرَاهِيمَ وَمُوسَىٰ ۝`,
+          latin:
+            "Sabbihisma rabbikal-a'la. Alladhi khalaqa fasawwa. Walladhi qaddara fahada. Walladhi akhrajal-mar'a. Faja'alahu ghutha'an ahwa. Sanuqri'uka fala tansa. Illa ma sha'allahu innahu ya'lamul-jahra wama yakhfa. Wanuyassiruka lil-yusra. Fadthakkir in nafa'atidh-dhikra. Sayadhdhakkaru may-yakhsha. Wayatajannabuhal-ashqa. Alladhi yaslan-naral-kubra. Thumma la yamutu fiha wala yahya. Qad aflaha man tazakka. Wadhakarasma rabbihi fasalla. Bal tu'thirunal-hayatad-dunya. Wal-akhiratu khairuw-wa-abqa. Inna hadha lafis-suhufil-ula. Suhufi ibrahima wa musa.",
+        },
+        "Ad-Duha": {
+          arabic: "وَالضُّحَى",
+          full: `وَا<span style="color:#3b82f6">لضُّـ</span>حَىٰ ۝ وَال<span style="color:#3b82f6">لَّـ</span>يْلِ إِذَا سَجَىٰ ۝ مَا وَدَّعَكَ رَبُّكَ وَمَا قَلَىٰ ۝ وَلَلْآخِرَةُ خَيْرٌ لَّكَ مِنَ الْأُولَىٰ ۝ وَلَسَوْفَ يُعْطِيكَ رَبُّكَ فَتَرْضَىٰ ۝ أَلَمْ يَجِدْكَ يَتِيمًا فَآوَىٰ ۝ وَوَجَدَكَ ضَ<span style="color:#ff0000">آ</span>لًّا فَهَدَىٰ ۝ وَوَجَدَكَ عَائِلًا فَأَغْنَىٰ ۝ فَأَمَّا الْيَتِيمَ فَلَا تَقْهَرْ ۝ وَأَمَّا ال<span style="color:#3b82f6">سَّـ</span>ائِلَ فَلَا تَنْهَرْ ۝ وَأَمَّا بِنِعْمَةِ رَبِّكَ فَحَدِّثْ ۝`,
+          latin:
+            "Wad-duha. Wal-laili idha saja. Ma wadda'aka rabbuka wama qala. Walal-akhiratu khairul laka minal-ula. Walasawfa yu'tika rabbuka fatarda. Alam yajidka yatiman faawa. Wawajadaka dallan fahada. Wawajadaka 'ailan faaghna. Fa ammal-yatima fala taqhar. Wa ammas-sa'ila fala tanhar. Wa amma bini'mati rabbika fahaddith.",
+        },
+        "Al-Baqarah-7": {
+          arabic: "الم ۝ ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ",
+          full: `الم ۝ ذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ ۝ الَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُقِيمُونَ ال<span style="color:#3b82f6">صَّـ</span>لَاةَ وَمِمَّا رَزَقْنَاهُمْ يُ<span style="color:#008000">نـفِـ</span>قُونَ ۝ وَالَّذِينَ يُؤْمِنُونَ بِمَا أُ<span style="color:#008000">نـزِ</span>لَ إِلَيْكَ وَمَا أُ<span style="color:#008000">نـزِ</span>لَ مِن قَبْلِكَ وَبِالْآخِرَةِ هُمْ يُوقِنُونَ ۝ أُولَٰئِكَ عَلَىٰ هُدًى مِّن رَّبِّهِمْ ۖ وَأُولَٰئِكَ هُمُ الْمُفْلِحُونَ ۝ <span style="color:#ff0000">إِنَّ</span> الَّذِينَ كَفَرُوا سَوَاءٌ عَلَيْهِمْ أَأَ<span style="color:#008000">نـذَ</span>رْتَهُمْ أَمْ لَمْ تُ<span style="color:#008000">نـذِ</span>رْهُمْ لَا يُؤْمِنُونَ ۝ خَتَمَ اللَّهُ عَلَىٰ قُلُوبِهِمْ وَعَلَىٰ سَمْعِهِمْ ۖ وَعَلَىٰ أَبْصَارِهِمْ غِشَاوَةٌ ۖ وَلَهُمْ عَذَابٌ عَظِيمٌ ۝`,
+          latin:
+            "Alif Lam Mim. Dhalikal-kitabu la raiba fih, hudal lil-muttaqin. Alladhina yu'minuna bil-ghaibi wayuqimunas-salata wamimma razaqnahum yunfiqun. Walladhina yu'minuna bima unzila ilaika wama unzila min qablika wabil-akhirati hum yuqinun. Ula'ika 'ala hudam mir rabbihim wa ula'ika humul-muflihun. Innalladhina kafaru sawa'un 'alaihim a-andhartahum am lam tundhirhum la yu'minun. Khatamallahu 'ala qulubihim wa 'ala sam'ihim wa 'ala absarihim ghishawah, walahum 'adhabun 'adhim.",
+        },
+        "Al-Baqarah-285": {
+          arabic: "لِّلَّهِ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ",
+          full: `لِّلَّهِ مَا فِي ال<span style="color:#3b82f6">سَّـ</span>مَاوَاتِ وَمَا فِي الْأَرْضِ ۗ وَإِن تُ<span style="color:#3b82f6">بْـ</span>دُوا مَا فِي أَنفُسِكُمْ أَوْ تُخْفُوهُ يُحَاسِ<span style="color:#3b82f6">بْـ</span>كُم بِهِ اللَّهُ ۖ فَيَغْفِرُ لِمَن يَشَاءُ وَيُعَذِّبُ مَن يَشَاءُ ۗ وَاللَّهُ عَلَىٰ كُلِّ شَيْءٍ قَدِيرٌ ۝ آمَنَ ال<span style="color:#3b82f6">رَّ</span>سُولُ بِمَا أُ<span style="color:#008000">نـزِ</span>لَ إِلَيْهِ مِن رَّبِّهِ وَالْمُؤْمِنُونَ ۚ كُلٌّ آمَنَ بِاللَّهِ وَمَلَائِكَتِهِ وَكُتُبِهِ وَرُسُلِهِ لَا نُفَرِّقُ بَيْنَ أَحَدٍ مِّن رُّسُلِهِ ۚ وَقَالُوا سَمِعْنَا وَأَطَعْنَا ۖ غُفْرَانَكَ رَبَّنَا وَإِلَيْكَ الْمَصِيرُ ۝`,
+          latin:
+            "Lillahi ma fis-samawati wa ma fil-ard. Wa in tubdu ma fi anfusikum au tukhfuhu yuhasibkum bihillah. Fayaghfiru limay-yasha'u wa yu'adhdhibu may-yasha', wallahu 'ala kulli shai'in qadir. Amanar-rasulu bima unzila ilaihi mir-rabbihi wal-mu'minun. Kullun amana billahi wa mala'ikatihi wa kutubihi wa rusulih, la nufarriqu baina ahadim mir rusulih, wa qalu sami'na wa ata'na ghufranaka rabbana wa ilaikal-masir.",
+        },
+        "Al-Baqarah-286": {
+          arabic: "لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا",
+          full: `لَا يُكَلِّفُ اللَّهُ نَفْسًا إِلَّا وُسْعَهَا ۚ لَهَا مَا كَسَبَتْ وَعَلَيْهَا مَا اكْتَسَبَتْ ۗ رَبَّنَا لَا تُؤَاخِذْنَا <span style="color:#ff0000">إِن نَّـ</span>سِيَنَا أَوْ أَخْطَأْنَا ۚ رَبَّنَا وَلَا تَحْمِلْ عَلَيْنَا إِصْرًا كَمَا حَمَلْتَهُ عَلَى الَّذِينَ مِن قَبْلِنَا ۚ رَبَّنَا وَلَا تُحَمِّلْنَا مَا لَا طَاقَةَ لَنَا بِهِ ۖ وَاعْفُ عَنَّا وَاغْفِرْ لَنَا وَارْحَمْنَا ۚ أَ<span style="color:#008000">نـتَ</span> مَوْلَانَا فَ<span style="color:#3b82f6">ا نـصُـ</span>رْنَا عَلَى الْقَوْمِ الْكَافِرِينَ ۝`,
+          latin:
+            "La yukallifullahu nafsan illa wus'aha. Laha ma kasabat wa 'alaiha maktasabat. Rabbana la tu'akhidhna in-nasina au akhta'na. Rabbana wala tahmil 'alaina isran kama hamaltahu 'alalladhina min qablina. Rabbana wala tuhammilna ma la taqata lana bih. Wa'fu 'anna waghfir lana warhamna, anta maulana fansurna 'alal-qaumil-kafirin.",
+        },
+        "Al-Baqarah-225": {
+          arabic: "لَّا يُؤَاخِذُكُمُ اللَّهُ بِاللَّغْوِ فِي أَيْمَانِكُمْ",
+          full: `لَّا يُؤَاخِذُكُمُ اللَّهُ بِاللَّغْوِ فِي أَيْمَانِكُمْ وَلَٰكِن يُؤَاخِذُكُم بِ<span style="color:#ff0000">مَا</span> كَسَبَتْ قُلُوبُكُمْ ۗ وَاللَّهُ غَفُو<span style="color:#3b82f6">رٌ حَ</span>لِي<span style="color:#3b82f6">مٌ</span> ۝`,
+          latin:
+            "Laa yu-aakhidzukumullaahu bil-laghwi fii aimaanikum wa laakiy yu-aakhidzukum bimaa kasabat quluubukum. Wallaahu ghafuurun haliim.",
+        },
+        "Ad-Duha": {
+          arabic: "وَالضُّحَىٰ ۝ وَاللَّيْلِ إِذَا سَجَىٰ ۝",
+          full: `وَالضُّحَىٰ ۝ وَاللَّيْلِ إِذَا سَجَىٰ ۝ مَا وَدَّعَكَ رَبُّكَ وَمَا قَلَىٰ ۝ وَلَلْآخِرَةُ خَيْرٌ لَّكَ مِنَ الْأُولَىٰ ۝ وَلَسَوْفَ يُعْطِيكَ رَبُّكَ فَتَرْضَىٰ ۝ أَلَمْ يَجِدْكَ يَتِيمًا فَآوَىٰ ۝ وَوَجَدَكَ ضَ<span style="color:#ff0000">الًّ</span>ا فَهَدَىٰ ۝ وَوَجَدَكَ عَائِلًا فَأَغْنَىٰ ۝ فَأَمَّا الْيَتِيمَ فَلَا تَقْهَرْ ۝ وَأَمَّا ا<span style="color:#ff0000">لسَّ</span>ائِلَ فَلَا تَنْهَرْ ۝ وَأَمَّا بِنِعْمَةِ رَبِّكَ فَ<span style="color:#3b82f6">حَدِّ</span>ثْ ۝`,
+          latin:
+            "Wadh-dhuhaa. Wal-laili idzaa sajaa. Maa wadda’aka rabbuka wa maa qalaa. Walal-aakhiratu khairul laka minal uulaa. Walasaufa yu’thiika rabbuka fatardhaa. Alam yajidka yatiiman fa-aawaa. Wawajadaka dhaallan fahadaa. Wawajadaka ‘aa-ilan fa-aghnaa. Fa-ammal yatiima falaa taqhar. Wa ammas-saa-ila falaa tanhar. Wa ammaa bini’mati rabbika fahaddits.",
         },
       };
-
       const bilalData = {
         1: {
           ar: "صَلُّوْا سُنَّةَ التَّرَاوِيْحِ رَكْعَتَيْنِ جَامِعَةً رَحِمَكُمُ اللهُ",
@@ -1143,7 +1244,7 @@
       function renderUI() {
         const isM = mode === "Muhammadiyah";
 
-        // Switch styling tombol Mahzab
+        // 1. Switch styling tombol Mahzab
         document.getElementById("btnM").className = isM
           ? "flex-1 py-2 text-[10px] font-black rounded-xl bg-slate-900 text-white shadow-md uppercase tracking-widest"
           : "flex-1 py-2 text-[10px] font-black rounded-xl text-slate-400 uppercase tracking-widest";
@@ -1151,7 +1252,7 @@
           ? "flex-1 py-2 text-[10px] font-black rounded-xl bg-slate-900 text-white shadow-md uppercase tracking-widest"
           : "flex-1 py-2 text-[10px] font-black rounded-xl text-slate-400 uppercase tracking-widest";
 
-        // Timeline Progress
+        // 2. Timeline Progress
         const container = document.getElementById("timeline");
         container.innerHTML = "";
         config[mode].label.forEach((lab, i) => {
@@ -1167,55 +1268,80 @@
         const info = document.getElementById("rakaatInfo");
         const mainBtn = document.getElementById("mainBtn");
 
-        // --- LOGIKA BACAAN BILAL (KHUSUS NU) ---
+        // 3. Logika Bacaan Bilal
         const bilalBox = document.getElementById("bilalContainer");
-        const bilalTxt = document.getElementById("bilalText"); // Untuk Arab
-        const bilalLat = document.getElementById("bilalLatin"); // Untuk Latin
-
         if (!isM && currentStep > 0 && bilalData[currentStep]) {
           bilalBox.classList.remove("hidden");
-          // Masukkan teks Arab
-          bilalTxt.innerText = bilalData[currentStep].ar;
-          // Masukkan teks Latin (pastikan ID bilalLatin ada di HTML)
-          if (bilalLat) {
-            bilalLat.innerText = bilalData[currentStep].lt;
-          }
+          document.getElementById("bilalText").innerText =
+            bilalData[currentStep].ar;
+          const bLat = document.getElementById("bilalLatin");
+          if (bLat) bLat.innerText = bilalData[currentStep].lt;
         } else {
-          bilalBox.classList.add("hidden");
+          if (bilalBox) bilalBox.classList.add("hidden");
         }
-        // ---------------------------------------
+
+        // 4. Logika Alur Sholat & Update Surah
+        const surahBox = document.getElementById("surahContainer");
 
         if (currentStep === 0) {
           display.innerText = "0";
           info.innerText = "Klik mulai sholat";
           document.getElementById("statusLabel").innerText = "READY";
           mainBtn.innerHTML = `<span>MULAI TARAWIH</span> <i class="fa-solid fa-play text-xs"></i>`;
-          document.getElementById("surahName").innerText = "-";
-          document.getElementById("surahArabic").innerText = "---";
+          surahBox.innerHTML = `<div class="text-center text-slate-300 text-xs uppercase font-bold tracking-tighter">Belum Ada Sesi</div>`;
         } else if (currentStep <= data.steps) {
           startTimer();
           display.innerText = currentStep;
           info.innerText = `RAKAAT ${data.label[currentStep - 1]}`;
 
-          // Update Label Tombol Utama
           mainBtn.innerHTML =
             currentStep === data.steps
               ? `<span>SELESAI</span> <i class="fa-solid fa-check"></i>`
               : `<span>LANJUT KE ${currentStep + 1}</span> <i class="fa-solid fa-chevron-right text-xs"></i>`;
 
-          // Update Saran Surat
-          const sName = data.surah[currentStep - 1];
-          document.getElementById("surahName").innerText = sName || "-";
-          document.getElementById("surahArabic").innerText = (
-            surahData[sName] || { arabic: "---" }
-          ).arabic;
+          // LOGIKA SURAH PAIR
+          const surahPair = data.surah[currentStep - 1];
+          let sName1 = "-",
+            sName2 = "-";
+          if (Array.isArray(surahPair)) {
+            sName1 = surahPair[0] || "-";
+            sName2 = surahPair[1] || "-";
+          } else {
+            sName1 = surahPair || "-";
+            sName2 = "Al-Ikhlas";
+          }
+
+          const d1 = surahData[sName1] || { arabic: "---" };
+          const d2 = surahData[sName2] || { arabic: "---" };
+
+          // UPDATE TAMPILAN SURAH (R1 KIRI-ATAS, ARAB CENTER)
+          surahBox.innerHTML = `
+    <div class="flex flex-col w-full">
+        <div class="flex flex-col items-start pointer-events-none">
+            <span class="px-1.5 py-0.5 bg-emerald-500 text-white text-[7px] font-black rounded mb-1 shadow-sm">R1 :  ${sName1}</span>
+        </div>
+        <div class="arabic text-2xl text-slate-900 leading-relaxed text-right w-full" dir="rtl">
+            ${d1.arabic}
+        </div>
+    </div>
+
+    <div class="border-t border-slate-200/60 w-full"></div>
+
+    <div class="flex flex-col w-full ">
+        <div class="flex flex-col items-start  pointer-events-none">
+            <span class="px-1.5 py-0.5 bg-emerald-500 text-white text-[7px] font-black rounded mb-1 shadow-sm">R2 :  ${sName2}</span>
+        </div>
+        
+        <div class="arabic text-2xl text-slate-900  leading-relaxed text-right w-full" dir="rtl">
+            ${d2.arabic}
+        </div>
+    </div>
+`;
         } else {
           stopTimer();
           display.innerText = "✓";
           info.innerText = "Alhamdulillah Selesai";
           mainBtn.innerHTML = `<span>ULANGI</span> <i class="fa-solid fa-rotate-left"></i>`;
-
-          // Sembunyikan bilal saat selesai
           if (bilalBox) bilalBox.classList.add("hidden");
         }
 
@@ -1295,16 +1421,16 @@
         list.innerHTML = tadarus
           .map(
             (t) => `
-                <div class="tadarus-card bg-slate-50 p-3 rounded-xl flex justify-between items-center shadow-sm">
-                    <div>
-                        <p class="text-[10px] font-black text-slate-700 uppercase">${t.surat}</p>
-                        <p class="text-[9px] font-bold text-slate-400">Ayat ${t.ayat}</p>
+                    <div class="tadarus-card bg-slate-50 p-3 rounded-xl flex justify-between items-center shadow-sm">
+                        <div>
+                            <p class="text-[10px] font-black text-slate-700 uppercase">${t.surat}</p>
+                            <p class="text-[9px] font-bold text-slate-400">Ayat ${t.ayat}</p>
+                        </div>
+                        <button onclick="deleteTadarus(${t.id})" class="text-red-200 hover:text-red-500 transition-colors px-2">
+                            <i class="fa-solid fa-trash-can text-xs"></i>
+                        </button>
                     </div>
-                    <button onclick="deleteTadarus(${t.id})" class="text-red-200 hover:text-red-500 transition-colors px-2">
-                        <i class="fa-solid fa-trash-can text-xs"></i>
-                    </button>
-                </div>
-            `,
+                `,
           )
           .join("");
       }
@@ -1316,16 +1442,55 @@
       }
 
       function showSurahDetail() {
-        if (currentStep === 0 || currentStep > config[mode].steps) return;
-        const sName = config[mode].surah[currentStep - 1];
-        document.getElementById("detailSurahTitle").innerText = sName;
+        const data = config[mode];
+        const surahPair = data.surah[currentStep - 1];
 
-        // GUNAKAN innerHTML (bukan innerText) agar warna muncul
-        document.getElementById("detailSurahArabic").innerHTML = (
-          surahData[sName] || { full: "Teks tidak tersedia" }
-        ).full;
+        if (!surahPair || currentStep === 0) return;
 
-        openModal("modalSurah");
+        const sName1 = surahPair[0];
+        const sName2 = surahPair[1];
+
+        const sData1 = surahData[sName1] || {
+          arabic: "Teks tidak ditemukan",
+          latin: "-",
+        };
+        const sData2 = surahData[sName2] || {
+          arabic: "Teks tidak ditemukan",
+          latin: "-",
+        };
+
+        // Jika Anda menggunakan SweetAlert2:
+        Swal.fire({
+          html: `
+                <div class="text-left px-1">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6 text-center">Panduan Bacaan Surat</p>
+
+                    <div class="bg-emerald-50 rounded-3xl p-5 border border-emerald-100 mb-4">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="px-3 py-1 bg-emerald-500 text-white text-[9px] font-black rounded-full uppercase">Rakaat 1</span>
+                            <span class="text-xs font-bold text-emerald-800">${sName1}</span>
+                        </div>
+                        <p class="arabic text-3xl text-right text-slate-800 leading-[2.5] mb-4" dir="rtl">${sData1.full}</p>
+                        <p class="text-[9px] font-bold text-emerald-700/60 italic uppercase leading-relaxed">${sData1.latin}</p>
+                    </div>
+
+                    <div class="bg-slate-50 rounded-3xl p-5 border border-slate-100">
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="px-3 py-1 bg-slate-400 text-white text-[9px] font-black rounded-full uppercase">Rakaat 2</span>
+                            <span class="text-xs font-bold text-slate-600">${sName2}</span>
+                        </div>
+                        <p class="arabic text-3xl text-right text-slate-800 leading-[2.5] mb-4" dir="rtl">${sData2.full}</p>
+                        <p class="text-[9px] font-bold text-slate-400 italic uppercase leading-relaxed">${sData2.latin}</p>
+                    </div>
+                </div>
+            `,
+          showConfirmButton: false,
+          showCloseButton: true,
+          background: "#fff",
+          borderRadius: "2rem",
+          width: "90%",
+          maxWidth: "450px",
+        });
       }
 
       function confirmModeChange(newMode) {

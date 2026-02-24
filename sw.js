@@ -1,57 +1,58 @@
-const CACHE_NAME = 'tarawih-go-v3'; // Naikkan versi ke v3
+const CACHE_NAME = 'tarawih-go-v4'; // Versi baru
 const ASSETS_TO_CACHE = [
-    'index.html',    // Tanpa ./ jika berada di root yang sama
+    './',
+    'index.html',
     'manifest.json',
     'logo.png'
 ];
 
-// 1. Install & Force Cache
+// 1. Install: Simpan semua aset ke HP
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            console.log('Caching assets...');
-            // Menggunakan addAll dengan proteksi: jika satu gagal, tetap lanjut
-            return Promise.all(
-                ASSETS_TO_CACHE.map(url => {
-                    return cache.add(url).catch(err => console.log('Gagal cache:', url, err));
-                })
-            );
+            console.log('Menyimpan aset ke memori HP...');
+            return cache.addAll(ASSETS_TO_CACHE);
         })
     );
     self.skipWaiting();
 });
 
-// 2. Aktivasi & Bersihkan Sampah Cache
+// 2. Activate: Hapus cache lama agar tidak penuh
 self.addEventListener('activate', (event) => {
     event.waitUntil(
-        caches.keys().then((cacheNames) => {
+        caches.keys().then((keys) => {
             return Promise.all(
-                cacheNames.map((cache) => {
-                    if (cache !== CACHE_NAME) {
-                        return caches.delete(cache);
-                    }
+                keys.map((key) => {
+                    if (key !== CACHE_NAME) return caches.delete(key);
                 })
             );
         })
     );
-    // Memastikan SW langsung mengontrol halaman saat pertama kali install
     return self.clients.claim();
 });
 
-// 3. Strategi Fetch: Network First (Supaya tidak stuck di cache lama)
-// Tapi jika internet mati, ambil dari Cache.
+// 3. Fetch: Strategi OFFLINE TOTAL
 self.addEventListener('fetch', (event) => {
     event.respondWith(
-        fetch(event.request).catch(() => {
-            return caches.match(event.request).then((response) => {
-                if (response) {
-                    return response;
-                }
-                // Jika user mencoba membuka halaman utama saat offline
-                if (event.request.mode === 'navigate') {
-                    return caches.match('index.html');
-                }
+        caches.match(event.request).then((cachedResponse) => {
+            // Jika file ada di memori HP (Cache), langsung tampilkan (Cepat & Offline)
+            if (cachedResponse) {
+                return cachedResponse;
+            }
+
+            // Jika tidak ada di cache, baru ambil ke internet
+            return fetch(event.request).then((networkResponse) => {
+                // Simpan file baru (seperti font/gambar cdn) ke cache secara otomatis
+                return caches.open(CACHE_NAME).then((cache) => {
+                    cache.put(event.request, networkResponse.clone());
+                    return networkResponse;
+                });
             });
+        }).catch(() => {
+            // Jika internet mati DAN file tidak ada di cache, arahkan ke halaman utama
+            if (event.request.mode === 'navigate') {
+                return caches.match('index.html');
+            }
         })
     );
 });

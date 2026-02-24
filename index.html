@@ -15,7 +15,6 @@
       content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Tarawih Go" />
     <link rel="apple-touch-icon" href="logo.png" />
-    <link rel="manifest" href="/manifest.json" />
 
     <link rel="icon" href="logo.png" />
 
@@ -188,36 +187,41 @@
 
   <body class="max-w-md mx-auto min-h-screen flex flex-col pb-8">
     <header class="modern-header px-6 py-4">
-      <div class="flex justify-between items-center">
-        <div class="flex items-center gap-2 text-slate-400">
+      <div class="flex justify-between items-center mb-3">
+        <div class="flex items-center gap-2 text-slate-500">
           <i class="fa-regular fa-clock text-[10px]"></i>
-          <span id="clock" class="text-[11px] font-bold tracking-tighter"
-            >00:00</span
+          <span
+            id="clock"
+            class="text-[11px] font-bold tracking-tighter w-[65px]"
+            >00:00:00</span
           >
         </div>
+
         <span
-          class="text-[9px] font-black uppercase tracking-[0.4em] text-sage-dark/40"
+          class="text-[9px] font-black uppercase tracking-[0.3em] text-slate-300"
           >Tarawih Go</span
         >
-        <div class="flex items-center gap-2 text-slate-400">
+
+        <div class="flex items-center gap-2 text-slate-500 justify-end">
           <span
-            id="date"
-            class="text-[11px] font-bold uppercase tracking-tighter"
-            >23 FEB</span
-          >
+            id="fullDate"
+            class="text-[11px] font-bold uppercase tracking-tighter text-right">
+            Selasa, 24 Feb
+          </span>
           <i class="fa-regular fa-calendar text-[10px]"></i>
         </div>
       </div>
+
       <div class="text-center relative">
-        <div class="w-8 h-[2px] bg-sage-done mx-auto mb-2 opacity-50"></div>
+        <div class="w-8 h-[2px] bg-emerald-400 mx-auto mb-2 opacity-50"></div>
         <h1
-          class="text-sm font-extrabold text-slate-800 tracking-tight leading-none uppercase">
-          Ramadhan <span class="text-sage-done" id="yearM">2026</span>
+          class="text-sm font-extrabold text-slate-1000 tracking-tight leading-none uppercase">
+          Ramadhan <span class="text-emerald-500" id="yearM"></span>
         </h1>
         <p
-          class="text-[9px] font-bold text-slate-400 mt-1 uppercase tracking-widest"
+          class="text-[9px] font-bold text-slate-700 mt-1 uppercase tracking-widest"
           id="yearH">
-          1447 Hijriyah
+          Hijriyah
         </p>
       </div>
     </header>
@@ -1508,6 +1512,37 @@
       }
 
       renderUI();
+
+      function updateDateTime() {
+        const now = new Date();
+
+        // 1. Update Jam dengan Detik
+        const hours = String(now.getHours()).padStart(2, "0");
+        const minutes = String(now.getMinutes()).padStart(2, "0");
+        const seconds = String(now.getSeconds()).padStart(2, "0");
+        document.getElementById("clock").innerText =
+          `${hours}:${minutes}:${seconds}`;
+
+        // 2. Update Hari dan Tanggal
+        const options = { weekday: "long", day: "numeric", month: "short" };
+        const dateString = now.toLocaleDateString("id-ID", options);
+        document.getElementById("fullDate").innerText = dateString;
+
+        // 3. Update Tahun Masehi Otomatis
+        const currentYear = now.getFullYear();
+        document.getElementById("yearM").innerText = currentYear;
+
+        // 4. Update Tahun Hijriah Otomatis (Estimasi Rumus Hijriah)
+        // Rumus: Hijri ≈ (Masehi - 622) * 1.0307
+        const currentHijri = Math.floor((currentYear - 622) * 1.0307);
+        document.getElementById("yearH").innerText = `${currentHijri} Hijriyah`;
+      }
+
+      // Jalankan setiap detik
+      setInterval(updateDateTime, 1000);
+
+      // Panggil langsung saat aplikasi dibuka
+      updateDateTime();
     </script>
 
     <script>
@@ -1550,13 +1585,17 @@
         deferredPrompt = null;
         console.log("Aplikasi berhasil terpasang!");
       });
+    </script>
 
+    <link rel="manifest" href="manifest.json" />
+
+    <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
           navigator.serviceWorker
-            .register("/sw.js")
-            .then((reg) => console.log("Service Worker aktif!"))
-            .catch((err) => console.error("Service Worker gagal:", err));
+            .register("./sw.js")
+            .then((reg) => console.log("Service Worker terdaftar!", reg))
+            .catch((err) => console.log("Gagal daftar Service Worker", err));
         });
       }
     </script>

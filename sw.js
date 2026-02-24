@@ -1,26 +1,25 @@
-const CACHE_NAME = 'tarawih-v1';
-const assets = [
-    '/',
-    '/index.html',
-    'https://cdn.tailwindcss.com',
-    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css'
+const CACHE_NAME = 'tarawih-go-v1';
+const ASSETS = [
+    './',
+    './index.html',
+    // Tambahkan file CSS/JS eksternal jika Anda mendownloadnya, 
+    // Jika menggunakan CDN (seperti Tailwind/FontAwesome), browser akan mencoba menyimpannya otomatis
 ];
 
-// Tahap Install (Simpan file ke cache)
-self.addEventListener('install', evt => {
-    evt.waitUntil(
-        caches.open(CACHE_NAME).then(cache => {
-            console.log('Caching assets...');
-            cache.addAll(assets);
+// Tahap Install: Simpan file ke Cache
+self.addEventListener('install', (event) => {
+    event.waitUntil(
+        caches.open(CACHE_NAME).then((cache) => {
+            return cache.addAll(ASSETS);
         })
     );
 });
 
-// Tahap Fetch (Ambil dari cache jika offline)
-self.addEventListener('fetch', evt => {
-    evt.respondWith(
-        caches.match(evt.request).then(cacheRes => {
-            return cacheRes || fetch(evt.request);
+// Tahap Fetch: Ambil dari Cache jika Offline
+self.addEventListener('fetch', (event) => {
+    event.respondWith(
+        caches.match(event.request).then((response) => {
+            return response || fetch(event.request);
         })
     );
 });

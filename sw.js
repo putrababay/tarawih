@@ -1,25 +1,58 @@
-const CACHE_NAME = 'tarawih-go-v1';
-const ASSETS = [
+const CACHE_NAME = 'tarawih-go-v2';
+// Daftar aset yang wajib ada offline
+const ASSETS_TO_CACHE = [
     './',
     './index.html',
-    // Tambahkan file CSS/JS eksternal jika Anda mendownloadnya, 
-    // Jika menggunakan CDN (seperti Tailwind/FontAwesome), browser akan mencoba menyimpannya otomatis
+    './manifest.json',
+    // Jika Anda punya file lokal lainnya, tambahkan di sini:
+    // './style.css',
+    // './app.js'
 ];
 
-// Tahap Install: Simpan file ke Cache
+// 1. Install Service Worker & Cache Aset
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            return cache.addAll(ASSETS);
+            console.log('Caching aset utama...');
+            return cache.addAll(ASSETS_TO_CACHE);
+        })
+    );
+    self.skipWaiting();
+});
+
+// 2. Aktivasi & Hapus Cache Lama
+self.addEventListener('activate', (event) => {
+    event.waitUntil(
+        caches.keys().then((cacheNames) => {
+            return Promise.all(
+                cacheNames.map((cache) => {
+                    if (cache !== CACHE_NAME) {
+                        console.log('Menghapus cache lama...');
+                        return caches.delete(cache);
+                    }
+                })
+            );
         })
     );
 });
 
-// Tahap Fetch: Ambil dari Cache jika Offline
+// 3. Strategi Fetch: Cache First, then Network
 self.addEventListener('fetch', (event) => {
     event.respondWith(
-        caches.match(event.request).then((response) => {
-            return response || fetch(event.request);
+        caches.match(event.request).then((cachedResponse) => {
+            // Jika ada di cache, kirim yang di cache. Jika tidak, ambil dari internet
+            return cachedResponse || fetch(event.request).then((networkResponse) => {
+                // Simpan hasil fetch baru ke cache secara otomatis (untuk font/cdn)
+                return caches.open(CACHE_NAME).then((cache) => {
+                    cache.put(event.request, networkResponse.clone());
+                    return networkResponse;
+                });
+            });
+        }).catch(() => {
+            // Jika internet mati dan file tidak ada di cache (fallback)
+            if (event.request.mode === 'navigate') {
+                return caches.match('./index.html');
+            }
         })
     );
 });

@@ -4,6 +4,7 @@ const ASSETS_TO_CACHE = [
     './',
     './index.html',
     './manifest.json',
+    './logo.png'
     // Jika Anda punya file lokal lainnya, tambahkan di sini:
     // './style.css',
     // './app.js'

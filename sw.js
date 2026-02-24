@@ -1,15 +1,15 @@
-const CACHE_NAME = 'tarawih-go-v5'; // Naikkan versi
+const CACHE_NAME = 'tarawih-go-v6';
 const ASSETS_TO_CACHE = [
-    'index.html',
-    'manifest.json',
-    'logo.png'
+    '/',
+    '/index.html',
+    '/manifest.json',
+    '/logo.png'
 ];
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            // Kita tambahkan '/' secara eksplisit agar root bisa dibuka offline
-            return cache.addAll([...ASSETS_TO_CACHE, './']);
+            return cache.addAll(ASSETS_TO_CACHE);
         })
     );
     self.skipWaiting();
@@ -25,12 +25,23 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
+    const url = new URL(event.request.url);
+
+    // LOGIKA PENTING: Jika request menuju ke halaman utama (root atau index.html)
+    if (url.pathname === '/' || url.pathname === '/index.html') {
+        event.respondWith(
+            caches.match('/').then((response) => {
+                return response || fetch(event.request);
+            })
+        );
+        return;
+    }
+
     event.respondWith(
         caches.match(event.request).then((cachedResponse) => {
             if (cachedResponse) return cachedResponse;
 
             return fetch(event.request).then((networkResponse) => {
-                // Simpan aset baru secara dinamis (seperti link CDN)
                 if (networkResponse.status === 200) {
                     const responseClone = networkResponse.clone();
                     caches.open(CACHE_NAME).then((cache) => {
@@ -40,9 +51,9 @@ self.addEventListener('fetch', (event) => {
                 return networkResponse;
             });
         }).catch(() => {
-            // FALLBACK: Jika offline total dan navigasi gagal
+            // Jika benar-benar offline dan navigasi gagal, berikan halaman utama
             if (event.request.mode === 'navigate') {
-                return caches.match('index.html');
+                return caches.match('/');
             }
         })
     );

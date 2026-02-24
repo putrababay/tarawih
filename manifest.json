@@ -2,7 +2,7 @@
     "name": "Tarawih Go - Panduan Sholat",
     "short_name": "TarawihGo",
     "description": "Panduan Sholat Tarawih & Witir Offline",
-    "start_url": "index.html",
+    "start_url": "/",
     "display": "standalone",
     "orientation": "portrait",
     "background_color": "#F8FAFC",

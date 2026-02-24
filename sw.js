@@ -1,70 +1,55 @@
-const CACHE_NAME = 'tarawih-go-v2';
-// Daftar aset yang wajib ada offline
+const CACHE_NAME = 'tarawih-go-v3'; // Naikkan versi ke v3
 const ASSETS_TO_CACHE = [
-    './',
-    './index.html',
-    './manifest.json',
-    './logo.png'
-    // Jika Anda punya file lokal lainnya, tambahkan di sini:
-    // './style.css',
-    // './app.js'
+    'index.html',    // Tanpa ./ jika berada di root yang sama
+    'manifest.json',
+    'logo.png'
 ];
 
-// 1. Install Service Worker & Cache Aset
+// 1. Install & Force Cache
 self.addEventListener('install', (event) => {
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
-            console.log('Caching aset utama...');
-            return cache.addAll(ASSETS_TO_CACHE);
+            console.log('Caching assets...');
+            // Menggunakan addAll dengan proteksi: jika satu gagal, tetap lanjut
+            return Promise.all(
+                ASSETS_TO_CACHE.map(url => {
+                    return cache.add(url).catch(err => console.log('Gagal cache:', url, err));
+                })
+            );
         })
     );
     self.skipWaiting();
 });
 
-// 2. Aktivasi & Hapus Cache Lama
+// 2. Aktivasi & Bersihkan Sampah Cache
 self.addEventListener('activate', (event) => {
     event.waitUntil(
         caches.keys().then((cacheNames) => {
             return Promise.all(
                 cacheNames.map((cache) => {
                     if (cache !== CACHE_NAME) {
-                        console.log('Menghapus cache lama...');
                         return caches.delete(cache);
                     }
                 })
             );
         })
     );
+    // Memastikan SW langsung mengontrol halaman saat pertama kali install
+    return self.clients.claim();
 });
 
-// 3. Strategi Fetch: Cache First, then Network
+// 3. Strategi Fetch: Network First (Supaya tidak stuck di cache lama)
+// Tapi jika internet mati, ambil dari Cache.
 self.addEventListener('fetch', (event) => {
-    // Abaikan request dari ekstensi browser atau skema bukan http/https
-    if (!(event.request.url.indexOf('http') === 0)) return;
-
     event.respondWith(
-        caches.match(event.request).then((cachedResponse) => {
-            if (cachedResponse) {
-                return cachedResponse;
-            }
-
-            return fetch(event.request).then((networkResponse) => {
-                // Jangan simpan response yang tidak valid (misal error 404)
-                if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic' && !event.request.url.includes('cdn')) {
-                    return networkResponse;
+        fetch(event.request).catch(() => {
+            return caches.match(event.request).then((response) => {
+                if (response) {
+                    return response;
                 }
-
-                // Salin response untuk disimpan di cache
-                const responseToCache = networkResponse.clone();
-                caches.open(CACHE_NAME).then((cache) => {
-                    cache.put(event.request, responseToCache);
-                });
-
-                return networkResponse;
-            }).catch(() => {
-                // Fallback Offline untuk navigasi halaman
+                // Jika user mencoba membuka halaman utama saat offline
                 if (event.request.mode === 'navigate') {
-                    return caches.match('./index.html');
+                    return caches.match('index.html');
                 }
             });
         })

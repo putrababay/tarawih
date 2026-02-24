@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tarawih-go-v6';
+const CACHE_NAME = 'tarawih-go-v7';
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
@@ -25,33 +25,28 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-    const url = new URL(event.request.url);
-
-    // LOGIKA PENTING: Jika request menuju ke halaman utama (root atau index.html)
-    if (url.pathname === '/' || url.pathname === '/index.html') {
-        event.respondWith(
-            caches.match('/').then((response) => {
-                return response || fetch(event.request);
-            })
-        );
-        return;
-    }
-
     event.respondWith(
         caches.match(event.request).then((cachedResponse) => {
+            // 1. Jika ada di cache, tampilkan langsung
             if (cachedResponse) return cachedResponse;
 
+            // 2. Jika tidak ada, ambil dari internet
             return fetch(event.request).then((networkResponse) => {
-                if (networkResponse.status === 200) {
-                    const responseClone = networkResponse.clone();
-                    caches.open(CACHE_NAME).then((cache) => {
-                        cache.put(event.request, responseClone);
-                    });
+                // Jangan simpan jika response tidak valid
+                if (!networkResponse || networkResponse.status !== 200) {
+                    return networkResponse;
                 }
+
+                // 3. Simpan otomatis file CSS/Font/JS dari CDN ke memori HP
+                const responseClone = networkResponse.clone();
+                caches.open(CACHE_NAME).then((cache) => {
+                    cache.put(event.request, responseClone);
+                });
+
                 return networkResponse;
             });
         }).catch(() => {
-            // Jika benar-benar offline dan navigasi gagal, berikan halaman utama
+            // Fallback jika offline total dan file tidak ada di cache
             if (event.request.mode === 'navigate') {
                 return caches.match('/');
             }

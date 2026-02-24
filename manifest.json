@@ -1,17 +1,24 @@
 {
-    "name": "Tarawih by Bayu Anggara",
-    "short_name": "Tarawih",
-    "description": "Panduan Tarawih, Bilal, dan Doa Kamilin Offline",
-    "start_url": "/index.html",
+    "name": "Tarawih Go - Panduan Sholat",
+    "short_name": "TarawihGo",
+    "description": "Panduan Sholat Tarawih & Witir Offline",
+    "start_url": "index.html",
     "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#10b981",
+    "orientation": "portrait",
+    "background_color": "#F8FAFC",
+    "theme_color": "#10B981",
     "icons": [
+        {
+            "src": "logo.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
         {
             "src": "logo.png",
             "sizes": "512x512",
             "type": "image/png",
-            "purpose": "any maskable"
+            "purpose": "any"
         }
     ]
 }

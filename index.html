@@ -185,6 +185,35 @@
       #surahContainer {
         transition: all 0.3s ease-in-out;
       }
+
+      /* Tracker Tarawih Grid */
+      .tarawih-grid {
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+
+      .day-btn {
+        aspect-ratio: 1/1;
+        border-radius: 10px;
+        font-size: 10px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #e2e8f0;
+        background: white;
+        color: #64748b;
+        transition: all 0.2s;
+      }
+
+      .day-success {
+        background-color: #10b981 !important;
+        color: white !important;
+        border-color: #059669 !important;
+        box-shadow: 0 4px 10px rgba(16, 185, 129, 0.2);
+      }
     </style>
   </head>
 
@@ -354,6 +383,14 @@
           <span>Doa Witir</span>
         </button>
       </div>
+
+      <section class="bg-white rounded-[2rem] p-6 border border-slate-100 mb-4">
+        <h2
+          class="text-[10px] font-black uppercase tracking-[0.3em] text-slate-800 mb-4 text-center">
+          Progress Tarawih 30 Hari
+        </h2>
+        <div id="tarawihTracker" class="tarawih-grid"></div>
+      </section>
 
       <section class="bg-white rounded-[2rem] p-6 border border-slate-100">
         <h2
@@ -1608,6 +1645,103 @@
         deferredPrompt = null;
         alert("Aplikasi berhasil ditambahkan ke layar utama!");
       });
+
+      const keutamaanTarawih = [
+        "Dosa-dosanya keluar seperti hari saat dilahirkan ibunya.",
+        "Dosa orang tuanya diampuni (jika mukmin).",
+        "Malaikat berseru: Mulailah beramal, Allah mengampuni dosamu yang lalu.",
+        "Mendapat pahala membaca Taurat, Zabur, Injil, dan Al-Qur'an.",
+        "Mendapat pahala seperti shalat di Masjidil Haram, Nabawi, dan Aqsha.",
+        "Mendapat pahala seperti orang yang thawaf di Baitul Ma'mur.",
+        "Seolah-olah menjumpai zaman Nabi Musa AS dan menolongnya melawan Fir'aun.",
+        "Diberi anugerah sebagaimana yang diberikan kepada Nabi Ibrahim AS.",
+        "Pahala ibadahnya seperti ibadah Nabi SAW.",
+        "Allah mengaruniakan kebaikan dunia dan akhirat.",
+        "Keluar dari dunia (wafat) seperti saat dilahirkan ibunya (bersih dosa).",
+        "Datang di hari kiamat dengan wajah bersinar seperti bulan purnama.",
+        "Datang di hari kiamat aman dari segala keburukan.",
+        "Malaikat bersaksi bahwa ia telah shalat tarawih, maka tak dihisab.",
+        "Para malaikat memohonkan ampunan untuknya.",
+        "Allah mencatat bebas dari neraka dan masuk surga.",
+        "Diberi pahala seperti pahala para Nabi.",
+        "Malaikat berseru: Allah ridha kepadamu dan orang tuamu.",
+        "Allah mengangkat derajatnya di surga Firdaus.",
+        "Diberi pahala seperti pahala para syuhada dan orang-orang shaleh.",
+        "Allah membangunkan rumah dari cahaya di surga.",
+        "Datang di hari kiamat dalam keadaan aman dari kesedihan.",
+        "Allah membangunkan kota untuknya di surga.",
+        "Diberi 24 doa yang mustajab.",
+        "Allah membebaskannya dari azab kubur.",
+        "Diangkat pahalanya selama 40 tahun.",
+        "Mampu melewati Shiratal Mustaqim secepat kilat.",
+        "Allah mengangkat 1000 derajat di surga.",
+        "Mendapat pahala 1000 kali haji yang mabrur.",
+        "Allah berfirman: Makanlah buah surga, mandilah air Salsabil, dan minumlah telaga Kautsar.",
+      ];
+
+      let tarawihStatus =
+        JSON.parse(localStorage.getItem("tarawihStatus")) || {};
+
+      function initTarawihTracker() {
+        const container = document.getElementById("tarawihTracker");
+        container.innerHTML = "";
+
+        for (let i = 1; i <= 30; i++) {
+          const btn = document.createElement("button");
+          btn.innerText = i;
+          btn.className = `day-btn ${tarawihStatus[i] ? "day-success" : ""}`;
+          btn.onclick = () => showTarawihInfo(i);
+          container.appendChild(btn);
+        }
+      }
+
+      function showTarawihInfo(day) {
+        const isDone = tarawihStatus[day];
+
+        Swal.fire({
+          title: `<span class="text-sm font-black uppercase">Malam ke-${day}</span>`,
+          html: `
+            <div class="p-2">
+                <p class="text-[11px] font-bold text-slate-400 uppercase tracking-widest mb-3">Keutamaan:</p>
+                <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-100 text-emerald-900 text-xs leading-relaxed font-medium">
+                    "${keutamaanTarawih[day - 1]}"
+                </div>
+            </div>
+        `,
+          showCancelButton: true,
+          confirmButtonText: isDone ? "Batal Tarawih" : "Sudah Tarawih",
+          cancelButtonText: "Tutup",
+          confirmButtonColor: isDone ? "#ef4444" : "#10b981",
+          borderRadius: "2rem",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            tarawihStatus[day] = !isDone;
+            localStorage.setItem(
+              "tarawihStatus",
+              JSON.stringify(tarawihStatus),
+            );
+            initTarawihTracker(); // Refresh tampilan
+
+            if (!isDone) {
+              Swal.fire({
+                icon: "success",
+                title: "Barakallah!",
+                text: "Semoga ibadahnya diterima Allah SWT.",
+                timer: 1500,
+                showConfirmButton: false,
+              });
+            }
+          }
+        });
+      }
+
+      // Tambahkan pemanggilan ini di window.onload yang sudah ada
+      // Contoh modifikasi window.onload Anda:
+      const originalOnload = window.onload;
+      window.onload = () => {
+        if (originalOnload) originalOnload();
+        initTarawihTracker();
+      };
     </script>
   </body>
 </html>
